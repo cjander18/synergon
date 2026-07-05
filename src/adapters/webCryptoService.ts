@@ -2,6 +2,7 @@ import type { Envelope, EnvelopeHeader } from '../domain/envelope';
 import type { CryptoService, EnvelopeRoute } from '../ports/cryptoService';
 import type { Result } from '../domain/result';
 import { err, ok } from '../domain/result';
+import { utf8Encode } from '../shared/utf8';
 
 // PBKDF2-SHA256 + AES-256-GCM via the Web Crypto API, per
 // docs/architecture/security-model.md. The routing header is passed as AAD so
@@ -47,7 +48,7 @@ export class WebCryptoService implements CryptoService {
   }
 
   private async deriveKey(password: string, salt: Uint8Array<ArrayBuffer>): Promise<CryptoKey> {
-    const material = await crypto.subtle.importKey('raw', utf8(password), 'PBKDF2', false, [
+    const material = await crypto.subtle.importKey('raw', utf8Encode(password), 'PBKDF2', false, [
       'deriveKey',
     ]);
     return crypto.subtle.deriveKey(
@@ -63,11 +64,7 @@ export class WebCryptoService implements CryptoService {
 // Array form gives deterministic order and unambiguous delimiting; salt and iv
 // are implicitly authenticated by their role in decryption.
 function aad(header: EnvelopeHeader): Uint8Array<ArrayBuffer> {
-  return utf8(JSON.stringify([header.v, header.workflowId, header.roundId, header.participantId]));
-}
-
-// TextEncoder always allocates a plain ArrayBuffer; the lib typing is just
-// looser than the runtime.
-function utf8(text: string): Uint8Array<ArrayBuffer> {
-  return new TextEncoder().encode(text) as Uint8Array<ArrayBuffer>;
+  return utf8Encode(
+    JSON.stringify([header.v, header.workflowId, header.roundId, header.participantId]),
+  );
 }

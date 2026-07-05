@@ -51,7 +51,7 @@ describe('envelope round trip: coordinator -> contributor -> coordinator', () =>
       response: {
         roundId: collected.header.roundId,
         participantId: collected.header.participantId,
-        ciphertext: collected.ciphertext,
+        envelope: collected,
       },
     });
     expect(workflow.rounds[0]?.status).toBe('Collecting');
@@ -96,7 +96,7 @@ describe('envelope round trip: coordinator -> contributor -> coordinator', () =>
       response: {
         roundId: stray.header.roundId,
         participantId: stray.header.participantId,
-        ciphertext: stray.ciphertext,
+        envelope: stray,
       },
     });
     expect(expectErr(result)).toMatch(/audience/i);

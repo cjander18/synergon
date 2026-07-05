@@ -36,7 +36,7 @@ export function fakeEnvelope(workflowId: Id, roundId: Id, participantId: Id): En
 }
 
 export function fakeResponse(roundId: Id, participantId: Id): StoredResponse {
-  return { roundId, participantId, ciphertext: new Uint8Array([1]) };
+  return { roundId, participantId, envelope: fakeEnvelope('w-1', roundId, participantId) };
 }
 
 export function baseWorkflow(): Workflow {

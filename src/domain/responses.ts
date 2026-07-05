@@ -1,12 +1,14 @@
+import type { Envelope } from './envelope';
 import type { Id } from './ids';
 
 export type ValidResponse = { readonly kind: 'ItemList'; readonly items: readonly string[] };
 
-// As stored on a round: ciphertext plus routing only. Never plaintext.
+// As stored on a round: the full encrypted envelope (salt/iv/header are needed
+// to decrypt at consolidation time) plus routing. Never plaintext.
 export interface StoredResponse {
   readonly roundId: Id;
   readonly participantId: Id;
-  readonly ciphertext: Uint8Array<ArrayBuffer>;
+  readonly envelope: Envelope;
 }
 
 // As handed to an AggregationStrategy: decrypted and structurally incapable of
