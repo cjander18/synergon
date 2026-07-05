@@ -6,7 +6,7 @@ export type ValidResponse = { readonly kind: 'ItemList'; readonly items: readonl
 export interface StoredResponse {
   readonly roundId: Id;
   readonly participantId: Id;
-  readonly ciphertext: Uint8Array;
+  readonly ciphertext: Uint8Array<ArrayBuffer>;
 }
 
 // As handed to an AggregationStrategy: decrypted and structurally incapable of

@@ -8,11 +8,11 @@ export interface EnvelopeHeader {
   readonly workflowId: Id;
   readonly roundId: Id;
   readonly participantId: Id;
-  readonly salt: Uint8Array;
-  readonly iv: Uint8Array;
+  readonly salt: Uint8Array<ArrayBuffer>;
+  readonly iv: Uint8Array<ArrayBuffer>;
 }
 
 export interface Envelope {
   readonly header: EnvelopeHeader;
-  readonly ciphertext: Uint8Array;
+  readonly ciphertext: Uint8Array<ArrayBuffer>;
 }
