@@ -1,0 +1,110 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+}
+
+.page {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.card {
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+label.checkbox {
+  font-weight: 400;
+  margin-top: 0.25rem;
+}
+
+input:not([type='checkbox']),
+textarea,
+select {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+}
+
+textarea {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+
+button {
+  margin-top: 0.75rem;
+  padding: 0.45rem 1rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+nav button {
+  margin-right: 0.5rem;
+}
+
+fieldset {
+  margin-top: 0.75rem;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 6px;
+}
+
+[role='alert'] {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.warn {
+  font-weight: 600;
+}
+
+.invitation {
+  border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  padding-top: 0.5rem;
+}
+
+.invitation h5 {
+  margin: 0.25rem 0;
+}
+
+.qr {
+  max-width: 10rem;
+  margin: 0.5rem 0;
+}
+
+.qr svg {
+  width: 100%;
+  height: auto;
+}
+
+.output li {
+  margin: 0.15rem 0;
+}
+
+.support {
+  opacity: 0.7;
+  font-size: 0.85em;
+}
+
+code {
+  font-size: 0.95em;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+}
