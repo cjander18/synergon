@@ -93,6 +93,51 @@ describe('CoordinatorConsole', () => {
     expect(screen.getAllByRole('link', { name: /invitation link/i })).toHaveLength(3);
   });
 
+  it('runs a Rank round to a ranked outcome', async () => {
+    const deps = makeDeps();
+    const user = userEvent.setup();
+    render(<CoordinatorConsole deps={deps} />);
+    await user.type(screen.getByLabelText('Title'), 'Priorities');
+    await user.type(screen.getByLabelText(/participants/i), 'Ana{enter}Ben');
+    await user.click(screen.getByRole('button', { name: 'Create workflow' }));
+
+    // The Score branch renders its scale inputs; then switch to Rank.
+    await user.selectOptions(await screen.findByLabelText('Question type'), 'Score');
+    expect(screen.getByLabelText('Scale min')).toBeTruthy();
+    await user.selectOptions(screen.getByLabelText('Question type'), 'Rank');
+
+    await user.type(screen.getByLabelText('Prompt'), 'Rank these risks');
+    await user.type(screen.getByLabelText(/items \(one per line\)/i), 'burnout{enter}lock-in');
+    await user.click(screen.getByRole('button', { name: 'Draft round' }));
+    await user.click(await screen.findByRole('button', { name: 'Issue round' }));
+
+    const links = (await screen.findAllByRole('link', {
+      name: /invitation link/i,
+    })) as HTMLAnchorElement[];
+    expect(links).toHaveLength(2);
+
+    for (const [i, link] of links.entries()) {
+      const invitation = unwrap(decodeEnvelope(link.href.split('#')[1] ?? ''));
+      const response = await deps.crypto.seal({
+        plaintext: utf8Encode(JSON.stringify({ ranking: ['lock-in', 'burnout'] })),
+        password: `secret-pw-${i + 1}`,
+        route: invitation.header,
+      });
+      await user.clear(screen.getByLabelText(/paste a response envelope/i));
+      await user.click(screen.getByLabelText(/paste a response envelope/i));
+      await user.paste(encodeEnvelope(response));
+      await user.click(screen.getByRole('button', { name: 'Import response' }));
+    }
+
+    await user.type(await screen.findByLabelText('Password for Ana'), 'secret-pw-1');
+    await user.type(screen.getByLabelText('Password for Ben'), 'secret-pw-2');
+    await user.click(screen.getByRole('button', { name: 'Run consolidation' }));
+
+    expect(await screen.findByText('lock-in')).toBeTruthy();
+    const output = document.querySelector('ol.output');
+    expect(output?.textContent).toMatch(/lock-in.*burnout/);
+  });
+
   it('supports a subset audience for later rounds', async () => {
     const deps = makeDeps();
     const user = userEvent.setup();

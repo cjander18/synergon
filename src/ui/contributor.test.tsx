@@ -72,3 +72,76 @@ describe('ContributorView', () => {
     expect(screen.queryByLabelText(/your encrypted response/i)).toBeNull();
   });
 });
+
+async function evaluationInvitation(spec: object) {
+  return crypto.seal({
+    plaintext: utf8Encode(JSON.stringify(spec)),
+    password: 'pw-1',
+    route: { workflowId: 'w-1', roundId: 'r-1', participantId: 'p-1' },
+  });
+}
+
+async function unlock() {
+  await userEvent.type(screen.getByLabelText('Password'), 'pw-1');
+  await userEvent.click(screen.getByRole('button', { name: 'Unlock' }));
+}
+
+describe('ContributorView — Score rounds', () => {
+  const spec = {
+    instruction: 'Score these risks',
+    expects: 'Score',
+    items: ['burnout', 'lock-in'],
+    scale: { min: 1, max: 5 },
+  };
+
+  it('scores each item within the scale and encrypts', async () => {
+    render(<ContributorView crypto={crypto} envelope={await evaluationInvitation(spec)} />);
+    await unlock();
+    await userEvent.type(await screen.findByLabelText('burnout'), '4');
+    await userEvent.type(screen.getByLabelText('lock-in'), '2');
+    await userEvent.click(screen.getByRole('button', { name: 'Encrypt response' }));
+
+    const output = (await screen.findByLabelText(
+      /your encrypted response/i,
+    )) as HTMLTextAreaElement;
+    const envelope = unwrap(decodeEnvelope(output.value));
+    expect(JSON.parse(utf8Decode(unwrap(await crypto.open(envelope, 'pw-1'))))).toEqual({
+      scores: { burnout: 4, 'lock-in': 2 },
+    });
+  });
+
+  it('rejects an out-of-scale score before encrypting', async () => {
+    render(<ContributorView crypto={crypto} envelope={await evaluationInvitation(spec)} />);
+    await unlock();
+    await userEvent.type(await screen.findByLabelText('burnout'), '9');
+    await userEvent.type(screen.getByLabelText('lock-in'), '2');
+    await userEvent.click(screen.getByRole('button', { name: 'Encrypt response' }));
+    expect(await screen.findByText(/between 1 and 5/i)).toBeTruthy();
+    expect(screen.queryByLabelText(/your encrypted response/i)).toBeNull();
+  });
+});
+
+describe('ContributorView — Rank rounds', () => {
+  const spec = {
+    instruction: 'Rank these risks',
+    expects: 'Rank',
+    items: ['a', 'b', 'c'],
+  };
+
+  it('reorders items and encrypts the ranking', async () => {
+    render(<ContributorView crypto={crypto} envelope={await evaluationInvitation(spec)} />);
+    await unlock();
+    await screen.findByText('Rank these risks');
+    await userEvent.click(screen.getByRole('button', { name: 'Move c up' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Move c up' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Encrypt response' }));
+
+    const output = (await screen.findByLabelText(
+      /your encrypted response/i,
+    )) as HTMLTextAreaElement;
+    const envelope = unwrap(decodeEnvelope(output.value));
+    expect(JSON.parse(utf8Decode(unwrap(await crypto.open(envelope, 'pw-1'))))).toEqual({
+      ranking: ['c', 'a', 'b'],
+    });
+  });
+});

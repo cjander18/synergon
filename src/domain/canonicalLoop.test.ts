@@ -95,7 +95,6 @@ describe('canonical loop: elicit -> deduplicate -> consolidate', () => {
       })),
       { kind: 'CloseIntake', roundId: 'r-2' },
       { kind: 'RunAggregation', roundId: 'r-2', pool: deidentify(round2Answers) },
-      { kind: 'CloseWorkflow' },
     );
 
     const round2 = workflow.rounds[1];
@@ -107,6 +106,56 @@ describe('canonical loop: elicit -> deduplicate -> consolidate', () => {
       items: [
         { text: 'Burnout', support: 2 },
         { text: 'Vendor lock-in', support: 1 },
+      ],
+    });
+
+    // Round 3 — everyone ranks the consolidated items; rank sums decide.
+    const rankSpec = {
+      kind: 'Rank' as const,
+      prompt: 'Rank what matters most',
+      items: ['Burnout', 'Vendor lock-in'],
+    };
+    const rank = elicitationFor(rankSpec);
+    workflow = apply(workflow, {
+      kind: 'DraftRound',
+      round: {
+        id: 'r-3',
+        audience: { kind: 'All' },
+        elicitation: rankSpec,
+        aggregation: { kind: 'Aggregate', stat: 'rankSum' },
+      },
+    });
+    workflow = apply(workflow, {
+      kind: 'IssueRound',
+      roundId: 'r-3',
+      invitations: workflow.participants.map((p) => ({
+        roundId: 'r-3',
+        participantId: p.id,
+        envelope: fakeEnvelope(workflow.id, 'r-3', p.id),
+      })),
+    });
+    const round3Answers = [
+      { participantId: 'p-1', value: unwrap(rank.validate({ ranking: ['Burnout', 'Vendor lock-in'] })) },
+      { participantId: 'p-2', value: unwrap(rank.validate({ ranking: ['Burnout', 'Vendor lock-in'] })) },
+      { participantId: 'p-3', value: unwrap(rank.validate({ ranking: ['Vendor lock-in', 'Burnout'] })) },
+    ];
+    workflow = apply(
+      workflow,
+      ...round3Answers.map((a) => ({
+        kind: 'ImportResponse' as const,
+        response: fakeResponse('r-3', a.participantId),
+      })),
+      { kind: 'CloseIntake', roundId: 'r-3' },
+      { kind: 'RunAggregation', roundId: 'r-3', pool: deidentify(round3Answers) },
+      { kind: 'CloseWorkflow' },
+    );
+
+    // M5 exit criterion: the workflow ends in a ranked, de-identified outcome.
+    expect(workflow.rounds[2]?.output).toEqual({
+      kind: 'RankedItems',
+      items: [
+        { text: 'Burnout', rankSum: 4 },
+        { text: 'Vendor lock-in', rankSum: 5 },
       ],
     });
     expect(workflow.status).toBe('Closed');

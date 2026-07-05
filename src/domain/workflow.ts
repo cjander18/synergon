@@ -13,20 +13,53 @@ export type Audience =
   | { readonly kind: 'All' }
   | { readonly kind: 'Subset'; readonly participantIds: readonly Id[] };
 
-export type ElicitationSpec = {
-  readonly kind: 'ItemList';
-  readonly prompt: string;
-  readonly maxItems?: number;
-};
+export type ElicitationSpec =
+  | { readonly kind: 'ItemList'; readonly prompt: string; readonly maxItems?: number }
+  | {
+      readonly kind: 'Score';
+      readonly prompt: string;
+      readonly items: readonly string[];
+      readonly scale: { readonly min: number; readonly max: number };
+    }
+  | { readonly kind: 'Rank'; readonly prompt: string; readonly items: readonly string[] };
 
-export type AggregationSpec = { readonly kind: 'Deduplicate' } | { readonly kind: 'Consolidate' };
+export type AggregationSpec =
+  | { readonly kind: 'Deduplicate' }
+  | { readonly kind: 'Consolidate' }
+  | { readonly kind: 'Aggregate'; readonly stat: 'mean' | 'median' | 'rankSum' }
+  | { readonly kind: 'Threshold'; readonly min: number };
 
 export type AggregationOutput =
   | { readonly kind: 'ItemPool'; readonly items: readonly string[] }
   | {
       readonly kind: 'ConsolidatedItems';
       readonly items: readonly { readonly text: string; readonly support: number }[];
+    }
+  | {
+      readonly kind: 'ScoredItems';
+      readonly items: readonly { readonly text: string; readonly score: number }[];
+    }
+  | {
+      readonly kind: 'RankedItems';
+      readonly items: readonly { readonly text: string; readonly rankSum: number }[];
     };
+
+// Which aggregations can consume which responses; checked when drafting so a
+// misconfigured round fails at composition time, not after collection.
+export function compatible(elicitation: ElicitationSpec, aggregation: AggregationSpec): boolean {
+  switch (elicitation.kind) {
+    case 'ItemList':
+      return (
+        aggregation.kind === 'Deduplicate' ||
+        aggregation.kind === 'Consolidate' ||
+        aggregation.kind === 'Threshold'
+      );
+    case 'Score':
+      return aggregation.kind === 'Aggregate' && aggregation.stat !== 'rankSum';
+    case 'Rank':
+      return aggregation.kind === 'Aggregate' && aggregation.stat === 'rankSum';
+  }
+}
 
 export type RoundStatus = 'Draft' | 'Issued' | 'Collecting' | 'Consolidating' | 'Closed';
 

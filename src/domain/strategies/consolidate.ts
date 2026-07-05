@@ -10,6 +10,7 @@ export function consolidateAggregation(): AggregationStrategy {
       const firstSpelling = new Map<string, string>();
       const support = new Map<string, number>();
       for (const response of pool) {
+        if (response.value.kind !== 'ItemList') continue;
         const mentioned = new Set(response.value.items.map(normalizeItem));
         for (const item of response.value.items) {
           const key = normalizeItem(item);

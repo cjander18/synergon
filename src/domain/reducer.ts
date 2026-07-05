@@ -2,7 +2,7 @@ import type { Command } from './commands';
 import type { Id } from './ids';
 import type { Result } from './result';
 import type { Round, Workflow } from './workflow';
-import { audienceIds } from './workflow';
+import { audienceIds, compatible } from './workflow';
 import { aggregationFor } from './strategies/registry';
 import { err, ok } from './result';
 
@@ -34,6 +34,11 @@ export function reduce(workflow: Workflow, command: Command): Result<Workflow> {
       }
       if (workflow.rounds.some((r) => r.status !== 'Closed')) {
         return err('the previous round must be Closed before drafting a new one');
+      }
+      if (!compatible(round.elicitation, round.aggregation)) {
+        return err(
+          `${round.aggregation.kind} aggregation is not compatible with ${round.elicitation.kind} elicitation`,
+        );
       }
       if (round.audience.kind === 'Subset') {
         if (round.audience.participantIds.length === 0) {

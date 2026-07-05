@@ -76,6 +76,43 @@ describe('DraftRound', () => {
     expect(expectErr(result)).toMatch(/unknown participant/i);
   });
 
+  it('rejects an aggregation that cannot consume the elicitation', () => {
+    const scoreWithDedupe = reduce(baseWorkflow(), {
+      kind: 'DraftRound',
+      round: {
+        id: 'r-1',
+        audience: { kind: 'All' },
+        elicitation: { kind: 'Score', prompt: 'p', items: ['a'], scale: { min: 1, max: 5 } },
+        aggregation: { kind: 'Deduplicate' },
+      },
+    });
+    expect(expectErr(scoreWithDedupe)).toMatch(/not compatible/i);
+
+    const rankWithMean = reduce(baseWorkflow(), {
+      kind: 'DraftRound',
+      round: {
+        id: 'r-1',
+        audience: { kind: 'All' },
+        elicitation: { kind: 'Rank', prompt: 'p', items: ['a', 'b'] },
+        aggregation: { kind: 'Aggregate', stat: 'mean' },
+      },
+    });
+    expect(expectErr(rankWithMean)).toMatch(/not compatible/i);
+  });
+
+  it('accepts a compatible evaluation round', () => {
+    const workflow = apply(baseWorkflow(), {
+      kind: 'DraftRound',
+      round: {
+        id: 'r-1',
+        audience: { kind: 'All' },
+        elicitation: { kind: 'Score', prompt: 'p', items: ['a'], scale: { min: 1, max: 5 } },
+        aggregation: { kind: 'Aggregate', stat: 'mean' },
+      },
+    });
+    expect(workflow.rounds[0]?.status).toBe('Draft');
+  });
+
   it('rejects an empty Subset audience', () => {
     const result = reduce(baseWorkflow(), {
       kind: 'DraftRound',

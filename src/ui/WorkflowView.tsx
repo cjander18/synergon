@@ -78,29 +78,79 @@ export function WorkflowView({
         </section>
       )}
 
-      {drafting && <DraftRoundForm deps={deps} workflow={workflow} onChange={onChange} />}
+      {drafting && (
+        <DraftRoundForm
+          key={workflow.rounds.length}
+          deps={deps}
+          workflow={workflow}
+          previousItems={outputItems(workflow)}
+          onChange={onChange}
+        />
+      )}
       {error !== '' && <p role="alert">{error}</p>}
     </article>
   );
 }
 
-function RoundOutput({ output }: { output: AggregationOutput }) {
-  if (output.kind === 'ItemPool') {
-    return (
-      <ul className="output">
-        {output.items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    );
+// Seeds the next round's item list from the latest closed round's output.
+function outputItems(workflow: Workflow): readonly string[] {
+  const closed = workflow.rounds.filter((round) => round.status === 'Closed');
+  const output = closed[closed.length - 1]?.output;
+  if (output === undefined) return [];
+  switch (output.kind) {
+    case 'ItemPool':
+      return output.items;
+    case 'ConsolidatedItems':
+    case 'ScoredItems':
+    case 'RankedItems':
+      return output.items.map((item) => item.text);
   }
-  return (
-    <ol className="output">
-      {output.items.map((entry) => (
-        <li key={entry.text}>
-          {entry.text} <span className="support">×{entry.support}</span>
-        </li>
-      ))}
-    </ol>
-  );
+}
+
+function RoundOutput({ output }: { output: AggregationOutput }) {
+  switch (output.kind) {
+    case 'ItemPool':
+      return (
+        <ul className="output">
+          {output.items.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      );
+    case 'ConsolidatedItems':
+      return (
+        <ol className="output">
+          {output.items.map((entry) => (
+            <li key={entry.text}>
+              <span>{entry.text}</span> <span className="support">×{entry.support}</span>
+            </li>
+          ))}
+        </ol>
+      );
+    case 'ScoredItems':
+      return (
+        <ol className="output">
+          {output.items.map((entry) => (
+            <li key={entry.text}>
+              <span>{entry.text}</span>{' '}
+              <span className="support">{formatScore(entry.score)}</span>
+            </li>
+          ))}
+        </ol>
+      );
+    case 'RankedItems':
+      return (
+        <ol className="output">
+          {output.items.map((entry) => (
+            <li key={entry.text}>
+              <span>{entry.text}</span> <span className="support">Σ{entry.rankSum}</span>
+            </li>
+          ))}
+        </ol>
+      );
+  }
+}
+
+function formatScore(score: number): string {
+  return Number.isInteger(score) ? String(score) : score.toFixed(2);
 }

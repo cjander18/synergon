@@ -1,7 +1,10 @@
 import type { Envelope } from './envelope';
 import type { Id } from './ids';
 
-export type ValidResponse = { readonly kind: 'ItemList'; readonly items: readonly string[] };
+export type ValidResponse =
+  | { readonly kind: 'ItemList'; readonly items: readonly string[] }
+  | { readonly kind: 'Score'; readonly scores: Readonly<Record<string, number>> }
+  | { readonly kind: 'Rank'; readonly ranking: readonly string[] };
 
 // As stored on a round: the full encrypted envelope (salt/iv/header are needed
 // to decrypt at consolidation time) plus routing. Never plaintext.

@@ -51,20 +51,22 @@ These are **data**, not behaviour. The matching behaviour lives in the
 
 ```ts
 type ElicitationSpec =
-  | { kind: 'FreeText'; prompt: string }
   | { kind: 'ItemList'; prompt: string; maxItems?: number }
-  | { kind: 'Score'; prompt: string; scale: { min: number; max: number } }
-  | { kind: 'Rank'; prompt: string; items: RankableItem[] }
-  | { kind: 'Clarify'; items: ClarifiableItem[] };
+  | { kind: 'Score'; prompt: string; items: string[]; scale: { min: number; max: number } }
+  | { kind: 'Rank'; prompt: string; items: string[] };
 
 type AggregationSpec =
-  | { kind: 'Identity' }
   | { kind: 'Deduplicate' }
-  | { kind: 'Cluster' }
   | { kind: 'Consolidate' }
   | { kind: 'Aggregate'; stat: 'mean' | 'median' | 'rankSum' }
   | { kind: 'Threshold'; min: number };
 ```
+
+`FreeText`, `Clarify`, `Identity`, and `Cluster` are planned variants, deferred
+until a round needs them (YAGNI). Tests drove `Score` to carry the `items` being
+scored — the scale alone was not enough to render or validate a response.
+Elicitation/aggregation pairs are checked for compatibility when a round is
+drafted (an ItemList round cannot end in `rankSum`, a Rank round must).
 
 ## Responses & de-identification
 

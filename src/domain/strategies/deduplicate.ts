@@ -6,6 +6,7 @@ export function deduplicateAggregation(): AggregationStrategy {
     aggregate(pool) {
       const firstSpelling = new Map<string, string>();
       for (const response of pool) {
+        if (response.value.kind !== 'ItemList') continue;
         for (const item of response.value.items) {
           const key = normalizeItem(item);
           if (!firstSpelling.has(key)) firstSpelling.set(key, item);
