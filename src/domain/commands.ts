@@ -24,6 +24,12 @@ export type Command =
       readonly roundId: Id;
       readonly invitations: readonly Invitation[];
     }
+  | {
+      readonly kind: 'ReissueInvitations';
+      readonly roundId: Id;
+      readonly invitations: readonly Invitation[];
+    }
+  | { readonly kind: 'CancelRound'; readonly roundId: Id }
   | { readonly kind: 'ImportResponse'; readonly response: StoredResponse }
   | { readonly kind: 'CloseIntake'; readonly roundId: Id }
   | {

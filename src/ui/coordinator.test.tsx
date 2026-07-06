@@ -138,6 +138,52 @@ describe('CoordinatorConsole', () => {
     expect(output?.textContent).toMatch(/lock-in.*burnout/);
   });
 
+  it('re-issues invitations to non-respondents with fresh passwords', async () => {
+    const deps = makeDeps();
+    const user = userEvent.setup();
+    render(<CoordinatorConsole deps={deps} />);
+    await createWorkflowInUi(user);
+    await user.type(await screen.findByLabelText('Prompt'), 'p');
+    await user.click(screen.getByRole('button', { name: 'Draft round' }));
+    await user.click(await screen.findByRole('button', { name: 'Issue round' }));
+    const links = (await screen.findAllByRole('link', {
+      name: /invitation link/i,
+    })) as HTMLAnchorElement[];
+    expect(links).toHaveLength(3);
+
+    // Ana responds; then the coordinator re-keys the round for the other two.
+    const invitation = unwrap(decodeEnvelope(links[0]?.href.split('#')[1] ?? ''));
+    const response = await deps.crypto.seal({
+      plaintext: utf8Encode(JSON.stringify({ items: ['a'] })),
+      password: 'secret-pw-1',
+      route: invitation.header,
+    });
+    await user.click(screen.getByLabelText(/paste a response envelope/i));
+    await user.paste(encodeEnvelope(response));
+    await user.click(screen.getByRole('button', { name: 'Import response' }));
+    await screen.findByText(/1 of 3 responses/i);
+
+    await user.click(screen.getByRole('button', { name: 'Re-issue invitations' }));
+    expect(await screen.findByText('secret-pw-4')).toBeTruthy();
+    expect(screen.getByText('secret-pw-5')).toBeTruthy();
+    expect(screen.queryByText('secret-pw-1')).toBeNull();
+    expect(screen.getAllByRole('link', { name: /invitation link/i })).toHaveLength(2);
+  });
+
+  it('cancels a stuck round and returns to drafting', async () => {
+    const deps = makeDeps();
+    const user = userEvent.setup();
+    render(<CoordinatorConsole deps={deps} />);
+    await createWorkflowInUi(user);
+    await user.type(await screen.findByLabelText('Prompt'), 'p');
+    await user.click(screen.getByRole('button', { name: 'Draft round' }));
+    await user.click(await screen.findByRole('button', { name: 'Issue round' }));
+
+    await user.click(await screen.findByRole('button', { name: 'Cancel round' }));
+    expect(await screen.findByText(/cancelled/i)).toBeTruthy();
+    expect(screen.getByLabelText('Prompt')).toBeTruthy();
+  });
+
   it('supports a subset audience for later rounds', async () => {
     const deps = makeDeps();
     const user = userEvent.setup();

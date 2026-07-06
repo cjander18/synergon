@@ -4,7 +4,7 @@ import type { PasswordGen } from '../ports/passwordGen';
 import type { WorkflowRepository } from '../ports/workflowRepository';
 import type { Id } from '../domain/ids';
 import type { Result } from '../domain/result';
-import type { Invitation, Workflow } from '../domain/workflow';
+import type { Invitation, Round, Workflow } from '../domain/workflow';
 import { audienceIds } from '../domain/workflow';
 import { elicitationFor } from '../domain/strategies/registry';
 import { reduce } from '../domain/reducer';
@@ -17,6 +17,30 @@ export interface IssuedInvitation {
   readonly participantId: Id;
   readonly password: string;
   readonly handle: EnvelopeHandle;
+}
+
+// Shared by issueRound and reissueInvitations: fresh password + sealed prompt
+// + published handle per participant.
+export async function sealInvitations(
+  deps: { crypto: CryptoService; channel: EnvelopeChannel; passwordGen: PasswordGen },
+  workflow: Workflow,
+  round: Round,
+  participantIds: readonly Id[],
+): Promise<{ issued: IssuedInvitation[]; invitations: Invitation[] }> {
+  const prompt = utf8Encode(JSON.stringify(elicitationFor(round.elicitation).describe()));
+  const issued: IssuedInvitation[] = [];
+  const invitations: Invitation[] = [];
+  for (const participantId of participantIds) {
+    const password = deps.passwordGen.next();
+    const envelope = await deps.crypto.seal({
+      plaintext: prompt,
+      password,
+      route: { workflowId: workflow.id, roundId: round.id, participantId },
+    });
+    invitations.push({ roundId: round.id, participantId, envelope });
+    issued.push({ participantId, password, handle: await deps.channel.publish(envelope) });
+  }
+  return { issued, invitations };
 }
 
 export async function issueRound(
@@ -34,19 +58,12 @@ export async function issueRound(
   if (round === undefined) return err(`unknown round ${input.roundId}`);
   if (round.status !== 'Draft') return err('only a Draft round can be issued');
 
-  const prompt = utf8Encode(JSON.stringify(elicitationFor(round.elicitation).describe()));
-  const issued: IssuedInvitation[] = [];
-  const invitations: Invitation[] = [];
-  for (const participantId of audienceIds(workflow, round.audience)) {
-    const password = deps.passwordGen.next();
-    const envelope = await deps.crypto.seal({
-      plaintext: prompt,
-      password,
-      route: { workflowId: workflow.id, roundId: round.id, participantId },
-    });
-    invitations.push({ roundId: round.id, participantId, envelope });
-    issued.push({ participantId, password, handle: await deps.channel.publish(envelope) });
-  }
+  const { issued, invitations } = await sealInvitations(
+    deps,
+    workflow,
+    round,
+    audienceIds(workflow, round.audience),
+  );
 
   const reduced = reduce(workflow, { kind: 'IssueRound', roundId: round.id, invitations });
   if (!reduced.ok) return reduced;

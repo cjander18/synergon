@@ -309,6 +309,82 @@ describe('CloseIntake and RunAggregation', () => {
   });
 });
 
+describe('CancelRound', () => {
+  it('cancels a round from any live state and allows drafting the next one', () => {
+    let workflow = apply(baseWorkflow(), draftRound('r-1'));
+    workflow = apply(workflow, issueToAll(workflow, 'r-1'), { kind: 'CancelRound', roundId: 'r-1' });
+    expect(workflow.rounds[0]?.status).toBe('Cancelled');
+    workflow = apply(workflow, draftRound('r-2'));
+    expect(workflow.rounds[1]?.status).toBe('Draft');
+  });
+
+  it('rejects cancelling a settled round', () => {
+    let workflow = apply(baseWorkflow(), draftRound('r-1'));
+    workflow = apply(workflow, issueToAll(workflow, 'r-1'), { kind: 'CancelRound', roundId: 'r-1' });
+    expect(expectErr(reduce(workflow, { kind: 'CancelRound', roundId: 'r-1' }))).toMatch(/settled/i);
+  });
+
+  it('rejects responses for a cancelled round', () => {
+    let workflow = apply(baseWorkflow(), draftRound('r-1'));
+    workflow = apply(workflow, issueToAll(workflow, 'r-1'), { kind: 'CancelRound', roundId: 'r-1' });
+    const result = reduce(workflow, {
+      kind: 'ImportResponse',
+      response: fakeResponse('r-1', 'p-1'),
+    });
+    expect(expectErr(result)).toMatch(/issued|collecting/i);
+  });
+});
+
+describe('ReissueInvitations', () => {
+  function collectingWithOneResponse() {
+    let workflow = apply(baseWorkflow(), draftRound('r-1'));
+    workflow = apply(workflow, issueToAll(workflow, 'r-1'), {
+      kind: 'ImportResponse',
+      response: fakeResponse('r-1', 'p-1'),
+    });
+    return workflow;
+  }
+
+  it('replaces invitations for participants who have not responded', () => {
+    const workflow = collectingWithOneResponse();
+    const fresh = fakeEnvelope('w-1', 'r-1', 'p-2');
+    const updated = apply(workflow, {
+      kind: 'ReissueInvitations',
+      roundId: 'r-1',
+      invitations: [{ roundId: 'r-1', participantId: 'p-2', envelope: fresh }],
+    });
+    const invitations = updated.rounds[0]?.invitations ?? [];
+    expect(invitations).toHaveLength(3);
+    expect(invitations.find((i) => i.participantId === 'p-2')?.envelope).toBe(fresh);
+  });
+
+  it('rejects re-issuing to a participant who already responded', () => {
+    const result = reduce(collectingWithOneResponse(), {
+      kind: 'ReissueInvitations',
+      roundId: 'r-1',
+      invitations: [
+        { roundId: 'r-1', participantId: 'p-1', envelope: fakeEnvelope('w-1', 'r-1', 'p-1') },
+      ],
+    });
+    expect(expectErr(result)).toMatch(/already responded/i);
+  });
+
+  it('rejects re-issuing outside the audience or outside Issued/Collecting', () => {
+    const draft = apply(baseWorkflow(), draftRound('r-1'));
+    expect(
+      expectErr(
+        reduce(draft, {
+          kind: 'ReissueInvitations',
+          roundId: 'r-1',
+          invitations: [
+            { roundId: 'r-1', participantId: 'p-1', envelope: fakeEnvelope('w-1', 'r-1', 'p-1') },
+          ],
+        }),
+      ),
+    ).toMatch(/issued|collecting/i);
+  });
+});
+
 describe('workflow lifecycle', () => {
   it('CloseWorkflow moves Active to Closed and blocks further commands', () => {
     const workflow = apply(baseWorkflow(), { kind: 'CloseWorkflow' });

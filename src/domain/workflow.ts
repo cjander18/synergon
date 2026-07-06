@@ -61,7 +61,18 @@ export function compatible(elicitation: ElicitationSpec, aggregation: Aggregatio
   }
 }
 
-export type RoundStatus = 'Draft' | 'Issued' | 'Collecting' | 'Consolidating' | 'Closed';
+export type RoundStatus =
+  | 'Draft'
+  | 'Issued'
+  | 'Collecting'
+  | 'Consolidating'
+  | 'Closed'
+  | 'Cancelled';
+
+// A settled round is finished business: consolidated or abandoned.
+export function isSettled(status: RoundStatus): boolean {
+  return status === 'Closed' || status === 'Cancelled';
+}
 
 export interface Invitation {
   readonly roundId: Id;

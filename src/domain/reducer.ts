@@ -2,7 +2,7 @@ import type { Command } from './commands';
 import type { Id } from './ids';
 import type { Result } from './result';
 import type { Round, Workflow } from './workflow';
-import { audienceIds, compatible } from './workflow';
+import { audienceIds, compatible, isSettled } from './workflow';
 import { aggregationFor } from './strategies/registry';
 import { err, ok } from './result';
 
@@ -32,8 +32,8 @@ export function reduce(workflow: Workflow, command: Command): Result<Workflow> {
       if (workflow.rounds.some((r) => r.id === round.id)) {
         return err(`round id ${round.id} already exists`);
       }
-      if (workflow.rounds.some((r) => r.status !== 'Closed')) {
-        return err('the previous round must be Closed before drafting a new one');
+      if (workflow.rounds.some((r) => !isSettled(r.status))) {
+        return err('the previous round must be Closed or Cancelled before drafting a new one');
       }
       if (!compatible(round.elicitation, round.aggregation)) {
         return err(
@@ -69,6 +69,37 @@ export function reduce(workflow: Workflow, command: Command): Result<Workflow> {
           command.invitations.every((i) => i.roundId === round.id);
         if (!covers) return err('invitations must exactly cover the round audience');
         return ok({ ...round, status: 'Issued', invitations: command.invitations });
+      });
+    }
+
+    case 'ReissueInvitations': {
+      return updateRound(workflow, command.roundId, (round) => {
+        if (round.status !== 'Issued' && round.status !== 'Collecting') {
+          return err('only an Issued or Collecting round can be re-issued');
+        }
+        const targets = new Set(audienceIds(workflow, round.audience));
+        const responded = new Set(round.responses.map((r) => r.participantId));
+        for (const invitation of command.invitations) {
+          if (invitation.roundId !== round.id) return err('invitation targets another round');
+          if (!targets.has(invitation.participantId)) {
+            return err(`participant ${invitation.participantId} is not in this round's audience`);
+          }
+          if (responded.has(invitation.participantId)) {
+            return err(`participant ${invitation.participantId} has already responded`);
+          }
+        }
+        const replacements = new Map(command.invitations.map((i) => [i.participantId, i]));
+        return ok({
+          ...round,
+          invitations: round.invitations.map((i) => replacements.get(i.participantId) ?? i),
+        });
+      });
+    }
+
+    case 'CancelRound': {
+      return updateRound(workflow, command.roundId, (round) => {
+        if (isSettled(round.status)) return err('a settled round cannot be cancelled');
+        return ok({ ...round, status: 'Cancelled' });
       });
     }
 

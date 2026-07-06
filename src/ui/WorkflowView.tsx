@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import type { AggregationOutput, Round, Workflow } from '../domain/workflow';
+import { isSettled } from '../domain/workflow';
 import type { IssuedInvitation } from '../application/issueRound';
 import { issueRound } from '../application/issueRound';
+import { reissueInvitations } from '../application/reissueInvitations';
+import { cancelRound } from '../application/cancelRound';
 import { CollectPanel } from './CollectPanel';
 import { DraftRoundForm } from './DraftRoundForm';
 import { InvitationsPanel } from './InvitationsPanel';
@@ -20,7 +23,7 @@ export function WorkflowView({
   const [error, setError] = useState('');
 
   const current = workflow.rounds[workflow.rounds.length - 1];
-  const drafting = current === undefined || current.status === 'Closed';
+  const drafting = current === undefined || isSettled(current.status);
 
   async function issue(round: Round) {
     setError('');
@@ -33,22 +36,47 @@ export function WorkflowView({
     onChange(result.value.workflow);
   }
 
+  async function reissue(round: Round) {
+    setError('');
+    const result = await reissueInvitations(deps, {
+      workflowId: workflow.id,
+      roundId: round.id,
+    });
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setInvitations(result.value.invitations);
+    onChange(result.value.workflow);
+  }
+
+  async function cancel(round: Round) {
+    setError('');
+    const result = await cancelRound(deps, { workflowId: workflow.id, roundId: round.id });
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+    setInvitations([]);
+    onChange(result.value);
+  }
+
   return (
     <article>
       <h2>{workflow.title}</h2>
 
       {workflow.rounds
-        .filter((round) => round.status === 'Closed')
+        .filter((round) => isSettled(round.status))
         .map((round) => (
           <section className="card" key={round.id}>
             <h3>
-              Round {round.index + 1} — Closed
+              Round {round.index + 1} — {round.status}
             </h3>
             {round.output !== undefined && <RoundOutput output={round.output} />}
           </section>
         ))}
 
-      {current !== undefined && current.status !== 'Closed' && (
+      {current !== undefined && !isSettled(current.status) && (
         <section>
           <h3>
             Round {current.index + 1} — {current.status}
@@ -63,9 +91,11 @@ export function WorkflowView({
               ) : (
                 <p>
                   Invitations were generated when this round was issued; passwords are only shown
-                  at that moment.
+                  at that moment. Use “Re-issue invitations” to generate fresh links and
+                  passwords for anyone who has not yet responded.
                 </p>
               )}
+              <button onClick={() => void reissue(current)}>Re-issue invitations</button>
               <CollectPanel
                 deps={deps}
                 workflow={workflow}
@@ -75,6 +105,7 @@ export function WorkflowView({
               />
             </>
           )}
+          <button onClick={() => void cancel(current)}>Cancel round</button>
         </section>
       )}
 

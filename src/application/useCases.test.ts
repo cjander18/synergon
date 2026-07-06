@@ -7,6 +7,8 @@ import { advanceRound } from './advanceRound';
 import { issueRound } from './issueRound';
 import { importResponse } from './importResponse';
 import { runConsolidation } from './runConsolidation';
+import { reissueInvitations } from './reissueInvitations';
+import { cancelRound } from './cancelRound';
 import { expectErr, unwrap } from '../domain/fixtures';
 import { utf8Decode, utf8Encode } from '../shared/utf8';
 import type { Envelope } from '../domain/envelope';
@@ -198,6 +200,58 @@ describe('importResponse', () => {
     expect(
       expectErr(await importResponse(deps, { workflowId: workflow.id, envelope: response })),
     ).toMatch(/already/i);
+  });
+});
+
+describe('reissueInvitations', () => {
+  it('issues fresh passwords and envelopes only to non-respondents, and persists', async () => {
+    const deps = testDeps();
+    const { workflow, invitations } = await setupIssuedRound(deps);
+    const first = invitations[0];
+    if (!first) throw new Error('missing invitation');
+    const response = await respond(first.handle, first.password, ['a']);
+    unwrap(await importResponse(deps, { workflowId: workflow.id, envelope: response }));
+
+    const roundId = workflow.rounds[0]?.id ?? '';
+    const reissued = unwrap(
+      await reissueInvitations(deps, { workflowId: workflow.id, roundId }),
+    );
+    expect(reissued.invitations).toHaveLength(2);
+    expect(reissued.invitations.map((i) => i.participantId)).not.toContain(first.participantId);
+    const oldPasswords = new Set(invitations.map((i) => i.password));
+    for (const inv of reissued.invitations) {
+      expect(oldPasswords.has(inv.password)).toBe(false);
+      const envelope = envelopeFrom(inv.handle);
+      const prompt = JSON.parse(
+        utf8Decode(unwrap(await cryptoService.open(envelope, inv.password))),
+      ) as { instruction: string };
+      expect(prompt.instruction).toBe('List the top risks');
+    }
+    expect(await deps.repo.load(workflow.id)).toEqual(reissued.workflow);
+  });
+
+  it('errors when everyone has already responded', async () => {
+    const deps = testDeps();
+    const { workflow, invitations } = await setupIssuedRound(deps);
+    for (const inv of invitations) {
+      const response = await respond(inv.handle, inv.password, ['x']);
+      unwrap(await importResponse(deps, { workflowId: workflow.id, envelope: response }));
+    }
+    const roundId = workflow.rounds[0]?.id ?? '';
+    expect(
+      expectErr(await reissueInvitations(deps, { workflowId: workflow.id, roundId })),
+    ).toMatch(/responded/i);
+  });
+});
+
+describe('cancelRound', () => {
+  it('cancels the round and persists', async () => {
+    const deps = testDeps();
+    const { workflow } = await setupIssuedRound(deps);
+    const roundId = workflow.rounds[0]?.id ?? '';
+    const updated = unwrap(await cancelRound(deps, { workflowId: workflow.id, roundId }));
+    expect(updated.rounds[0]?.status).toBe('Cancelled');
+    expect(await deps.repo.load(workflow.id)).toEqual(updated);
   });
 });
 

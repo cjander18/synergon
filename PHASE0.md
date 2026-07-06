@@ -7,8 +7,8 @@
 | # | Blocker | Status | Notes |
 |---|---------|--------|-------|
 | 1 | Human two-profile smoke test | blocked-on-user | Instructions below — only a human can run this |
-| 2 | Invitation re-issue for a live round | todo | Domain command + use-case + UI button |
-| 3 | Close/abandon a zero-response round | todo | New `Cancelled` round status |
+| 2 | Invitation re-issue for a live round | done | Fresh passwords for non-respondents only; responses untouched |
+| 3 | Close/abandon a zero-response round | done | `Cancelled` status + Cancel round button from any live state |
 | 4 | Workflow export/import | todo | File-based JSON codec + UI |
 | 5 | Static-host deploy | todo | GitHub Pages via Actions; `base: './'` keeps file:// runnable |
 | 6 | Landing page | todo | Static page at `/`, app moves to `/app.html` |
