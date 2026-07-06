@@ -206,6 +206,23 @@ describe('CoordinatorConsole', () => {
     expect((await fresh.repo.list()).map((w) => w.title)).toEqual(['Q3 risks']);
   });
 
+  it('loads a demo workflow into an empty console so the loop is visible immediately', async () => {
+    const deps = makeDeps();
+    const user = userEvent.setup();
+    render(<CoordinatorConsole deps={deps} />);
+
+    await user.click(await screen.findByRole('button', { name: 'Load the demo workflow' }));
+    expect(await screen.findByRole('heading', { name: /demo/i })).toBeTruthy();
+    // All three closed rounds of the canonical loop are on screen…
+    expect(screen.getByText(/round 1 — closed/i)).toBeTruthy();
+    expect(screen.getByText(/round 3 — closed/i)).toBeTruthy();
+    // …ending in a ranked outcome, and the next round is ready to draft.
+    expect(document.querySelectorAll('.output').length).toBeGreaterThanOrEqual(3);
+    expect(screen.getByLabelText('Prompt')).toBeTruthy();
+    // The offer disappears once a workflow exists.
+    expect(screen.queryByRole('button', { name: 'Load the demo workflow' })).toBeNull();
+  });
+
   it('supports a subset audience for later rounds', async () => {
     const deps = makeDeps();
     const user = userEvent.setup();

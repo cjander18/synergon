@@ -12,7 +12,7 @@
 | 4 | Workflow export/import | done | Versioned JSON codec (binary as base64url); download w/ copy fallback |
 | 5 | Static-host deploy | todo | GitHub Pages via Actions; `base: './'` keeps file:// runnable |
 | 6 | Landing page | todo | Static page at `/`, app moves to `/app.html` |
-| 7 | In-app demo workflow | todo | Seeded 3-round deliberation, shown when console is empty |
+| 7 | In-app demo workflow | done | Built through the real reducer; offered when console is empty |
 | 8 | License decision executed | done | MIT shipped (LICENSE + package.json) |
 | 9 | Anonymity copy audit | done | README, vision.md qualified; UI was already compliant |
 

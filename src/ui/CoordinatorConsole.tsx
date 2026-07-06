@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Workflow } from '../domain/workflow';
 import { createWorkflow } from '../application/createWorkflow';
 import { decodeWorkflow } from '../adapters/workflowCodec';
+import { buildDemoWorkflow } from './demo';
 import { WorkflowView } from './WorkflowView';
 import type { AppDeps } from './types';
 
@@ -12,6 +13,13 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
   const [participantsText, setParticipantsText] = useState('');
   const [importText, setImportText] = useState('');
   const [error, setError] = useState('');
+
+  async function loadDemo() {
+    const demo = buildDemoWorkflow();
+    await deps.repo.save(demo);
+    setSelected(demo);
+    setWorkflows(await deps.repo.list());
+  }
 
   async function importWorkflow() {
     setError('');
@@ -56,7 +64,7 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
     <main className="page">
       <h1>Synergon</h1>
 
-      {workflows.length > 0 && (
+      {workflows.length > 0 ? (
         <nav>
           {workflows.map((workflow) => (
             <button key={workflow.id} onClick={() => setSelected(workflow)}>
@@ -64,6 +72,14 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
             </button>
           ))}
         </nav>
+      ) : (
+        <section className="card">
+          <p>
+            New here? Load a finished example deliberation — three rounds from raw risk list to
+            ranked shortlist — to see how Synergon works before inviting anyone.
+          </p>
+          <button onClick={() => void loadDemo()}>Load the demo workflow</button>
+        </section>
       )}
 
       <section className="card">
