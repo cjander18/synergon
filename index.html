@@ -3,10 +3,208 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Synergon</title>
+    <title>Synergon — hear your whole team, not just the loudest voice</title>
+    <meta
+      name="description"
+      content="Run anonymous-to-peers, multi-round team deliberations — collect, consolidate, rank — entirely in your browser. No server, no accounts, free."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+      }
+      body {
+        margin: 0;
+      }
+      .wrap {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 1.5rem 1.25rem 4rem;
+      }
+      header.hero {
+        padding: 3rem 0 2rem;
+        text-align: center;
+      }
+      h1 {
+        font-size: 2.2rem;
+        line-height: 1.2;
+        margin: 0 0 1rem;
+      }
+      .sub {
+        font-size: 1.15rem;
+        opacity: 0.85;
+        max-width: 38rem;
+        margin: 0 auto 2rem;
+      }
+      .cta {
+        display: inline-block;
+        padding: 0.8rem 1.8rem;
+        border-radius: 8px;
+        background: #2563eb;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.05rem;
+      }
+      .cta.secondary {
+        background: transparent;
+        color: inherit;
+        border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+        margin-left: 0.75rem;
+      }
+      section {
+        margin-top: 3rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      .steps {
+        display: grid;
+        gap: 1rem;
+        padding: 0;
+        margin: 1.5rem 0 0;
+        list-style: none;
+        counter-reset: step;
+      }
+      .steps li {
+        border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        counter-increment: step;
+      }
+      .steps li::before {
+        content: counter(step);
+        display: inline-block;
+        width: 1.6rem;
+        height: 1.6rem;
+        line-height: 1.6rem;
+        text-align: center;
+        border-radius: 50%;
+        background: #2563eb;
+        color: #fff;
+        font-weight: 700;
+        margin-right: 0.6rem;
+      }
+      .pillars {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+      .pillar {
+        border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+      }
+      .pillar h3 {
+        margin: 0 0 0.5rem;
+        font-size: 1.05rem;
+      }
+      .honest {
+        border-left: 4px solid #2563eb;
+        padding: 0.25rem 0 0.25rem 1rem;
+        opacity: 0.9;
+      }
+      footer {
+        margin-top: 4rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+      a {
+        color: #2563eb;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <div class="wrap">
+      <header class="hero">
+        <h1>Hear your whole team,<br />not just the loudest voice.</h1>
+        <p class="sub">
+          Synergon runs structured, multi-round deliberations — collect ideas anonymously from
+          peers, consolidate, clarify, then rank — so decisions reflect your group's judgment,
+          not its hierarchy. The method is Delphi; the spreadsheet is gone.
+        </p>
+        <a class="cta" href="./app.html">Open Synergon — free</a>
+        <a class="cta secondary" href="https://github.com/cjander18/synergon">Source on GitHub</a>
+      </header>
+
+      <section>
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li>
+            <strong>Ask.</strong> Pose a question and send each teammate a private, encrypted
+            link with its own password. They answer in two minutes — no account, no install.
+          </li>
+          <li>
+            <strong>Consolidate.</strong> Responses pool with identities removed. Deduplicate
+            and merge, then send the combined list back for clarification or another pass.
+          </li>
+          <li>
+            <strong>Rank.</strong> Everyone scores or ranks privately; Synergon aggregates.
+            You get a shortlist the group actually believes in — with the support to prove it.
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Why it's different</h2>
+        <div class="pillars">
+          <div class="pillar">
+            <h3>A real method, not a poll</h3>
+            <p>
+              Delphi and Nominal Group Technique are decades-proven at removing anchoring,
+              groupthink, and the seniority effect. Synergon runs the full loop, not one round.
+            </p>
+          </div>
+          <div class="pillar">
+            <h3>Anonymous to peers</h3>
+            <p>
+              Nobody's answer can be traced by colleagues — contributions are pooled with
+              identities stripped before anyone evaluates anything.
+            </p>
+          </div>
+          <div class="pillar">
+            <h3>Nothing to trust but math</h3>
+            <p>
+              No server. No accounts. Everything runs in your browser; responses travel as
+              end-to-end encrypted envelopes. There is nothing for IT to review.
+            </p>
+          </div>
+          <div class="pillar">
+            <h3>Free means free</h3>
+            <p>
+              The local product is complete and free, forever. Paid tiers, when they come, only
+              ever add hosted convenience.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>An honest note on anonymity</h2>
+        <p class="honest">
+          Responses are anonymous <em>to other participants</em> — that is what removes the
+          social bias. The coordinator who sends the invitations knows who received each link.
+          We say this plainly here and inside the product, and the full
+          <a href="https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md"
+            >threat model is public</a
+          >.
+        </p>
+      </section>
+
+      <footer>
+        <p>
+          Synergon is open source (MIT) ·
+          <a href="https://github.com/cjander18/synergon">GitHub</a> ·
+          <a href="https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md"
+            >Security model</a
+          >
+          · Works offline — you can even run it from a file.
+        </p>
+      </footer>
+    </div>
   </body>
 </html>

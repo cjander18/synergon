@@ -11,15 +11,14 @@
 | 3 | Close/abandon a zero-response round | done | `Cancelled` status + Cancel round button from any live state |
 | 4 | Workflow export/import | done | Versioned JSON codec (binary as base64url); download w/ copy fallback |
 | 5 | Static-host deploy | todo | GitHub Pages via Actions; `base: './'` keeps file:// runnable |
-| 6 | Landing page | todo | Static page at `/`, app moves to `/app.html` |
+| 6 | Landing page | done | Static landing at `/`, app at `/app.html`; honest-anonymity section |
 | 7 | In-app demo workflow | done | Built through the real reducer; offered when console is empty |
 | 8 | License decision executed | done | MIT shipped (LICENSE + package.json) |
 | 9 | Anonymity copy audit | done | README, vision.md qualified; UI was already compliant |
 
 ## Blocker 1 — smoke test instructions (for Clinton)
 
-1. `cd ~/repos/synergon && npm run dev` — open the printed URL, add `/app.html`
-   once blocker 6 lands (plain `/` until then).
+1. `cd ~/repos/synergon && npm run dev` — open the printed URL — landing is at `/`, the app at `/app.html`.
 2. As **Dana**: create a workflow (yourself + 2 fake teammates), draft an
    ItemList round, issue it. Copy one invitation link + its password.
 3. As **Sam**: open the link in a second browser profile or incognito window.
