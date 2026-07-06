@@ -184,6 +184,28 @@ describe('CoordinatorConsole', () => {
     expect(screen.getByLabelText('Prompt')).toBeTruthy();
   });
 
+  it('exports a workflow and imports it into a fresh console', async () => {
+    const deps = makeDeps();
+    const user = userEvent.setup();
+    const { unmount } = render(<CoordinatorConsole deps={deps} />);
+    await createWorkflowInUi(user);
+    await screen.findByText('Ana');
+
+    // jsdom has no URL.createObjectURL, so export falls back to copyable text.
+    await user.click(screen.getByRole('button', { name: 'Export workflow' }));
+    const exported = (await screen.findByLabelText(/exported workflow/i)) as HTMLTextAreaElement;
+    expect(exported.value).toContain('Q3 risks');
+    unmount();
+
+    const fresh = makeDeps();
+    render(<CoordinatorConsole deps={fresh} />);
+    await user.click(screen.getByLabelText(/import a workflow/i));
+    await user.paste(exported.value);
+    await user.click(screen.getByRole('button', { name: 'Import workflow' }));
+    expect(await screen.findByRole('heading', { name: 'Q3 risks' })).toBeTruthy();
+    expect((await fresh.repo.list()).map((w) => w.title)).toEqual(['Q3 risks']);
+  });
+
   it('supports a subset audience for later rounds', async () => {
     const deps = makeDeps();
     const user = userEvent.setup();

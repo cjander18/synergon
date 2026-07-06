@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Workflow } from '../domain/workflow';
 import { createWorkflow } from '../application/createWorkflow';
+import { decodeWorkflow } from '../adapters/workflowCodec';
 import { WorkflowView } from './WorkflowView';
 import type { AppDeps } from './types';
 
@@ -9,7 +10,21 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
   const [selected, setSelected] = useState<Workflow>();
   const [title, setTitle] = useState('');
   const [participantsText, setParticipantsText] = useState('');
+  const [importText, setImportText] = useState('');
   const [error, setError] = useState('');
+
+  async function importWorkflow() {
+    setError('');
+    const decoded = decodeWorkflow(importText);
+    if (!decoded.ok) {
+      setError(decoded.error);
+      return;
+    }
+    await deps.repo.save(decoded.value);
+    setImportText('');
+    setSelected(decoded.value);
+    setWorkflows(await deps.repo.list());
+  }
 
   useEffect(() => {
     void deps.repo.list().then(setWorkflows);
@@ -63,6 +78,16 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
           onChange={(e) => setParticipantsText(e.target.value)}
         />
         <button onClick={() => void create()}>Create workflow</button>
+
+        <label htmlFor="import-workflow">Import a workflow (paste an exported file's contents)</label>
+        <textarea
+          id="import-workflow"
+          rows={3}
+          value={importText}
+          onChange={(e) => setImportText(e.target.value)}
+        />
+        <button onClick={() => void importWorkflow()}>Import workflow</button>
+        <p className="hint">Importing replaces any existing workflow with the same id.</p>
         {error !== '' && <p role="alert">{error}</p>}
       </section>
 

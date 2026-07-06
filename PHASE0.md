@@ -9,7 +9,7 @@
 | 1 | Human two-profile smoke test | blocked-on-user | Instructions below — only a human can run this |
 | 2 | Invitation re-issue for a live round | done | Fresh passwords for non-respondents only; responses untouched |
 | 3 | Close/abandon a zero-response round | done | `Cancelled` status + Cancel round button from any live state |
-| 4 | Workflow export/import | todo | File-based JSON codec + UI |
+| 4 | Workflow export/import | done | Versioned JSON codec (binary as base64url); download w/ copy fallback |
 | 5 | Static-host deploy | todo | GitHub Pages via Actions; `base: './'` keeps file:// runnable |
 | 6 | Landing page | todo | Static page at `/`, app moves to `/app.html` |
 | 7 | In-app demo workflow | todo | Seeded 3-round deliberation, shown when console is empty |

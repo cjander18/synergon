@@ -5,9 +5,11 @@ import type { IssuedInvitation } from '../application/issueRound';
 import { issueRound } from '../application/issueRound';
 import { reissueInvitations } from '../application/reissueInvitations';
 import { cancelRound } from '../application/cancelRound';
+import { encodeWorkflow } from '../adapters/workflowCodec';
 import { CollectPanel } from './CollectPanel';
 import { DraftRoundForm } from './DraftRoundForm';
 import { InvitationsPanel } from './InvitationsPanel';
+import { tryDownload } from './download';
 import type { AppDeps } from './types';
 
 export function WorkflowView({
@@ -20,7 +22,16 @@ export function WorkflowView({
   onChange: (workflow: Workflow) => void;
 }) {
   const [invitations, setInvitations] = useState<readonly IssuedInvitation[]>([]);
+  const [exportText, setExportText] = useState('');
   const [error, setError] = useState('');
+
+  function exportWorkflow() {
+    const contents = encodeWorkflow(workflow);
+    const slug = workflow.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    if (!tryDownload(`${slug || 'workflow'}.synergon-workflow.json`, contents)) {
+      setExportText(contents);
+    }
+  }
 
   const current = workflow.rounds[workflow.rounds.length - 1];
   const drafting = current === undefined || isSettled(current.status);
@@ -64,6 +75,13 @@ export function WorkflowView({
   return (
     <article>
       <h2>{workflow.title}</h2>
+      <button onClick={exportWorkflow}>Export workflow</button>
+      {exportText !== '' && (
+        <>
+          <label htmlFor="export-workflow">Exported workflow (save this text as a file)</label>
+          <textarea id="export-workflow" rows={4} readOnly value={exportText} />
+        </>
+      )}
 
       {workflow.rounds
         .filter((round) => isSettled(round.status))
