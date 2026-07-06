@@ -1,6 +1,6 @@
 # Synergon
 
-**Structured, anonymous group deliberation — local-first, no backend.**
+**Structured group deliberation, anonymous to peers — local-first, no backend.**
 
 Synergon turns a group into a better decision-maker than any of its members by
 separating *elicitation* from *evaluation* and keeping contributions anonymous to
@@ -10,7 +10,7 @@ social biases that normally degrade group decisions — seniority, charisma,
 anchoring, and groupthink.
 
 A **Coordinator** poses a prompt to a group. Each **Contributor** answers
-independently and anonymously. The Coordinator consolidates the pool (deduplicate,
+independently, anonymous to their peers. The Coordinator consolidates the pool (deduplicate,
 cluster, merge), sends it back out to everyone or a chosen subset, and runs another
 round — clarify, expand, score, rank — repeating until the group converges.
 
@@ -36,7 +36,7 @@ approved. See the [roadmap](docs/roadmap.md).
 | [vision.md](docs/vision.md) | The problem, the business case, guiding principles |
 | [concepts.md](docs/concepts.md) | Deliberation methods and the bias glossary |
 | [personas/coordinator.md](docs/personas/coordinator.md) | Dana, the facilitator/admin |
-| [personas/contributor.md](docs/personas/contributor.md) | Sam, the anonymous participant |
+| [personas/contributor.md](docs/personas/contributor.md) | Sam, the peer-anonymous participant |
 | [architecture/overview.md](docs/architecture/overview.md) | Layers, local-first, tech choices |
 | [architecture/generic-workflow.md](docs/architecture/generic-workflow.md) | The Round/operation abstraction |
 | [architecture/domain-model.md](docs/architecture/domain-model.md) | Entities and the state machine |

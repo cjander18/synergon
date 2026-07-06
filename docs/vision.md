@@ -27,7 +27,7 @@ counteract this (see [concepts.md](concepts.md)). Its common thread is simple:
 > **Separate elicitation from evaluation, keep contributions anonymous to peers, and
 > let a neutral facilitator consolidate between rounds.**
 
-When people generate ideas independently and anonymously, then evaluate them
+When people generate ideas independently and anonymously to their peers, then evaluate them
 independently, the group's collective judgement consistently beats both the loudest
 individual and the unstructured discussion.
 
@@ -43,7 +43,7 @@ Synergon is a tool that operationalizes that loop:
 6. The Coordinator **aggregates** and runs the next round.
 7. Repeat until the group **converges**.
 
-This is a *generic workflow*: "collect anonymously → consolidate → redistribute →
+This is a *generic workflow*: "collect peer-anonymously → consolidate → redistribute →
 refine" is the primitive. Ranking, clarifying, and scoring are just configured
 rounds, not special cases (see
 [architecture/generic-workflow.md](architecture/generic-workflow.md)).
