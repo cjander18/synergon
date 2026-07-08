@@ -63,6 +63,7 @@ Use accessible queries (they double as an a11y check): `page.getByLabel(…)`,
 | Contributor | `getByLabel('Password')`, button `Unlock`, `getByLabel(/your answer/i)`, button `Encrypt response`, `getByLabel(/your encrypted response/i).inputValue()` |
 | Import & consolidate | `getByLabel(/paste a response envelope/i)`, button `Import response`, text `N of M responses`, `getByLabel('Password for <label>')`, button `Run consolidation` |
 | Round lifecycle | heading `Round N` + status badge: `locator('.badge', { hasText: 'Closed' })` (Draft/Issued/Collecting/Closed/Cancelled) |
+| Coordinator deep link | `/app.html#w=<workflowId>` opens the console with that workflow selected; selection changes update the fragment |
 | Cancel round | two-step: button `Cancel round`, then button `/discard round N/i` |
 
 Gotchas: invitation passwords appear **only at issue time** — lift them in the

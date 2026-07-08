@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CoordinatorConsole } from './CoordinatorConsole';
 import { decodeEnvelope, encodeEnvelope } from '../adapters/envelopeCodec';
@@ -252,6 +252,31 @@ describe('CoordinatorConsole', () => {
 
     expect(await screen.findAllByRole('link', { name: /invitation link/i })).toHaveLength(3);
     expect(screen.queryByRole('button', { name: 'Issuing…' })).toBeNull();
+  });
+
+  it('reflects the selected workflow in the URL fragment and follows hash changes', async () => {
+    window.location.hash = '';
+    const deps = makeDeps();
+    const user = userEvent.setup();
+    render(<CoordinatorConsole deps={deps} />);
+    await createWorkflowInUi(user);
+    await screen.findByRole('heading', { name: 'Q3 risks' });
+
+    // Selection lands in the URL (seq id gen: the workflow got id-1).
+    expect(window.location.hash).toBe('#w=id-1');
+
+    // Browser back to "no selection".
+    window.location.hash = '';
+    window.dispatchEvent(new Event('hashchange'));
+    await waitFor(() =>
+      expect(screen.queryByRole('heading', { name: 'Q3 risks' })).toBeNull(),
+    );
+
+    // Browser forward to the workflow again.
+    window.location.hash = '#w=id-1';
+    window.dispatchEvent(new Event('hashchange'));
+    expect(await screen.findByRole('heading', { name: 'Q3 risks' })).toBeTruthy();
+    window.location.hash = '';
   });
 
   it('supports a subset audience for later rounds', async () => {

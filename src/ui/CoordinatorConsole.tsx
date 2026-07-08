@@ -7,7 +7,13 @@ import { AsyncButton } from './AsyncButton';
 import { WorkflowView } from './WorkflowView';
 import type { AppDeps } from './types';
 
-export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
+export function CoordinatorConsole({
+  deps,
+  initialWorkflowId,
+}: {
+  deps: AppDeps;
+  initialWorkflowId?: string;
+}) {
   const [workflows, setWorkflows] = useState<readonly Workflow[]>([]);
   const [selected, setSelected] = useState<Workflow>();
   const [title, setTitle] = useState('');
@@ -17,14 +23,46 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
 
   useEffect(() => {
     void deps.repo.list().then(setWorkflows);
+    if (initialWorkflowId !== undefined) {
+      void deps.repo.load(initialWorkflowId).then((workflow) => {
+        if (workflow !== undefined) setSelected(workflow);
+      });
+    }
+  }, [deps, initialWorkflowId]);
+
+  // The selection is URL-addressable (#w=<id>): back/forward and reload keep
+  // the coordinator's place. Meaningful only in this browser — the data is
+  // local — so this is ergonomics, not sharing.
+  useEffect(() => {
+    function onHashChange() {
+      const fragment = window.location.hash.replace(/^#/, '');
+      if (fragment === '') {
+        setSelected(undefined);
+        return;
+      }
+      if (!fragment.startsWith('w=')) return; // envelope or foreign fragment
+      void deps.repo.load(fragment.slice(2)).then((workflow) => {
+        if (workflow !== undefined) setSelected(workflow);
+      });
+    }
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
   }, [deps]);
+
+  function select(workflow: Workflow) {
+    setSelected(workflow);
+    const next = `w=${workflow.id}`;
+    if (window.location.hash.replace(/^#/, '') !== next) {
+      window.location.hash = next;
+    }
+  }
 
   const firstRun = workflows.length === 0;
 
   async function loadDemo() {
     const demo = buildDemoWorkflow();
     await deps.repo.save(demo);
-    setSelected(demo);
+    select(demo);
     setWorkflows(await deps.repo.list());
   }
 
@@ -37,7 +75,7 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
     }
     await deps.repo.save(decoded.value);
     setImportText('');
-    setSelected(decoded.value);
+    select(decoded.value);
     setWorkflows(await deps.repo.list());
   }
 
@@ -54,7 +92,7 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
     }
     setTitle('');
     setParticipantsText('');
-    setSelected(result.value);
+    select(result.value);
     setWorkflows(await deps.repo.list());
   }
 
@@ -122,7 +160,7 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
               <button
                 key={workflow.id}
                 className={selected?.id === workflow.id ? 'active' : ''}
-                onClick={() => setSelected(workflow)}
+                onClick={() => select(workflow)}
               >
                 {workflow.title}
               </button>
