@@ -60,8 +60,8 @@ export function CollectPanel({
   return (
     <section className="card">
       <h4>Collect responses</h4>
-      <p>
-        {round.responses.length} of {expected} responses
+      <p className="count">
+        <strong>{round.responses.length} of {expected} responses</strong> received
       </p>
       <label htmlFor="collect-paste">Paste a response envelope</label>
       <textarea
@@ -91,7 +91,9 @@ export function CollectPanel({
               />
             </div>
           ))}
-          <button onClick={() => void consolidate()}>Run consolidation</button>
+          <button className="primary" onClick={() => void consolidate()}>
+            Run consolidation
+          </button>
         </>
       )}
 

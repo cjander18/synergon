@@ -85,7 +85,7 @@ await rec.step('Dana', 're-enters passwords and runs consolidation', async (page
     await page.getByLabel(`Password for ${response.label}`).fill(response.password);
   }
   await page.getByRole('button', { name: 'Run consolidation' }).click();
-  await page.getByText(/Round 1 — Closed/).waitFor();
+  await page.locator('.badge', { hasText: 'Closed' }).waitFor();
 });
 
 await rec.step('Dana', 'sees the deduplicated pool and the next draft form', async (page) => {

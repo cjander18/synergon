@@ -102,12 +102,16 @@ export function ContributorView({
 
   return (
     <main className="page">
-      <h1>Synergon</h1>
-      <p>
-        Your answer is anonymous to other participants — responses are pooled with identities
-        removed before anyone sees them.
-      </p>
-      <p>The coordinator who invited you knows who received this link.</p>
+      <header className="app-header">
+        <h1>Synergon</h1>
+      </header>
+      <div className="note">
+        <p>
+          Your answer is anonymous to other participants — responses are pooled with identities
+          removed before anyone sees them.
+        </p>
+        <p>The coordinator who invited you knows who received this link.</p>
+      </div>
 
       {prompt === undefined ? (
         <section className="card">
@@ -119,7 +123,7 @@ export function ContributorView({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={() => void unlock()}>Unlock</button>
+          <button className="primary" onClick={() => void unlock()}>Unlock</button>
         </section>
       ) : (
         <section className="card">
@@ -180,7 +184,7 @@ export function ContributorView({
             </>
           )}
 
-          <button onClick={() => void encryptResponse(prompt)}>Encrypt response</button>
+          <button className="primary" onClick={() => void encryptResponse(prompt)}>Encrypt response</button>
         </section>
       )}
 

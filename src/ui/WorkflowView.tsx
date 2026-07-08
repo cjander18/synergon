@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { AggregationOutput, Round, Workflow } from '../domain/workflow';
+import type { AggregationOutput, Round, RoundStatus, Workflow } from '../domain/workflow';
 import { isSettled } from '../domain/workflow';
 import type { IssuedInvitation } from '../application/issueRound';
 import { issueRound } from '../application/issueRound';
@@ -23,7 +23,11 @@ export function WorkflowView({
 }) {
   const [invitations, setInvitations] = useState<readonly IssuedInvitation[]>([]);
   const [exportText, setExportText] = useState('');
+  const [confirmingCancel, setConfirmingCancel] = useState(false);
   const [error, setError] = useState('');
+
+  const current = workflow.rounds[workflow.rounds.length - 1];
+  const drafting = current === undefined || isSettled(current.status);
 
   function exportWorkflow() {
     const contents = encodeWorkflow(workflow);
@@ -32,9 +36,6 @@ export function WorkflowView({
       setExportText(contents);
     }
   }
-
-  const current = workflow.rounds[workflow.rounds.length - 1];
-  const drafting = current === undefined || isSettled(current.status);
 
   async function issue(round: Round) {
     setError('');
@@ -69,6 +70,7 @@ export function WorkflowView({
       return;
     }
     setInvitations([]);
+    setConfirmingCancel(false);
     onChange(result.value);
   }
 
@@ -87,27 +89,25 @@ export function WorkflowView({
         .filter((round) => isSettled(round.status))
         .map((round) => (
           <section className="card" key={round.id}>
-            <h3>
-              Round {round.index + 1} — {round.status}
-            </h3>
+            <RoundHead index={round.index} status={round.status} />
             {round.output !== undefined && <RoundOutput output={round.output} />}
           </section>
         ))}
 
       {current !== undefined && !isSettled(current.status) && (
         <section>
-          <h3>
-            Round {current.index + 1} — {current.status}
-          </h3>
+          <RoundHead index={current.index} status={current.status} />
           {current.status === 'Draft' && (
-            <button onClick={() => void issue(current)}>Issue round</button>
+            <button className="primary" onClick={() => void issue(current)}>
+              Issue round
+            </button>
           )}
           {(current.status === 'Issued' || current.status === 'Collecting') && (
             <>
               {invitations.length > 0 ? (
                 <InvitationsPanel invitations={invitations} workflow={workflow} />
               ) : (
-                <p>
+                <p className="meta">
                   Invitations were generated when this round was issued; passwords are only shown
                   at that moment. Use “Re-issue invitations” to generate fresh links and
                   passwords for anyone who has not yet responded.
@@ -123,7 +123,15 @@ export function WorkflowView({
               />
             </>
           )}
-          <button onClick={() => void cancel(current)}>Cancel round</button>
+          {confirmingCancel ? (
+            <button className="danger" onClick={() => void cancel(current)}>
+              Discard round {current.index + 1} — this cannot be undone
+            </button>
+          ) : (
+            <button className="danger-outline" onClick={() => setConfirmingCancel(true)}>
+              Cancel round
+            </button>
+          )}
         </section>
       )}
 
@@ -138,6 +146,16 @@ export function WorkflowView({
       )}
       {error !== '' && <p role="alert">{error}</p>}
     </article>
+  );
+}
+
+// The state machine, made visible: round number + a labeled semantic badge.
+function RoundHead({ index, status }: { index: number; status: RoundStatus }) {
+  return (
+    <div className="round-head">
+      <h3>Round {index + 1}</h3>
+      <span className={`badge badge-${status.toLowerCase()}`}>{status}</span>
+    </div>
   );
 }
 

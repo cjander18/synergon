@@ -179,7 +179,9 @@ describe('CoordinatorConsole', () => {
     await user.click(screen.getByRole('button', { name: 'Draft round' }));
     await user.click(await screen.findByRole('button', { name: 'Issue round' }));
 
+    // Destructive action is two-step: intent, then a named-consequence confirm.
     await user.click(await screen.findByRole('button', { name: 'Cancel round' }));
+    await user.click(await screen.findByRole('button', { name: /discard round 1/i }));
     expect(await screen.findByText(/cancelled/i)).toBeTruthy();
     expect(screen.getByLabelText('Prompt')).toBeTruthy();
   });
@@ -214,8 +216,9 @@ describe('CoordinatorConsole', () => {
     await user.click(await screen.findByRole('button', { name: 'Load the demo workflow' }));
     expect(await screen.findByRole('heading', { name: /demo/i })).toBeTruthy();
     // All three closed rounds of the canonical loop are on screen…
-    expect(screen.getByText(/round 1 — closed/i)).toBeTruthy();
-    expect(screen.getByText(/round 3 — closed/i)).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Round 1' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Round 3' })).toBeTruthy();
+    expect(screen.getAllByText('Closed')).toHaveLength(3);
     // …ending in a ranked outcome, and the next round is ready to draft.
     expect(document.querySelectorAll('.output').length).toBeGreaterThanOrEqual(3);
     expect(screen.getByLabelText('Prompt')).toBeTruthy();

@@ -62,7 +62,8 @@ Use accessible queries (they double as an a11y check): `page.getByLabel(…)`,
 | Invitations (shown once!) | `locator('.invitation')` → within: `h5` (label), `a` (link href), `code` (password) |
 | Contributor | `getByLabel('Password')`, button `Unlock`, `getByLabel(/your answer/i)`, button `Encrypt response`, `getByLabel(/your encrypted response/i).inputValue()` |
 | Import & consolidate | `getByLabel(/paste a response envelope/i)`, button `Import response`, text `N of M responses`, `getByLabel('Password for <label>')`, button `Run consolidation` |
-| Round lifecycle | text `Round N — Draft/Issued/Collecting/Closed/Cancelled` |
+| Round lifecycle | heading `Round N` + status badge: `locator('.badge', { hasText: 'Closed' })` (Draft/Issued/Collecting/Closed/Cancelled) |
+| Cancel round | two-step: button `Cancel round`, then button `/discard round N/i` |
 
 Gotchas: invitation passwords appear **only at issue time** — lift them in the
 same step. Real PBKDF2 (600k iterations) makes issue/unlock/consolidate take

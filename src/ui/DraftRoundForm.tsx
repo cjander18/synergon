@@ -199,7 +199,7 @@ export function DraftRoundForm({
           </label>
         ))}
       </fieldset>
-      <button onClick={() => void draft()}>Draft round</button>
+      <button className="primary" onClick={() => void draft()}>Draft round</button>
       {error !== '' && <p role="alert">{error}</p>}
     </section>
   );

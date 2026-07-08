@@ -25,7 +25,13 @@ export function InvitationsPanel({
           {inv.handle.kind === 'url' ? (
             <>
               <a href={inv.handle.url}>Invitation link</a>
-              <Qr text={inv.handle.url} />
+              <p>
+                Password: <code>{inv.password}</code>
+              </p>
+              <details>
+                <summary>Show QR code</summary>
+                <Qr text={inv.handle.url} />
+              </details>
             </>
           ) : (
             <>
@@ -39,11 +45,11 @@ export function InvitationsPanel({
                 value={inv.handle.contents}
                 aria-label={`File contents for ${labelOf(inv.participantId)}`}
               />
+              <p>
+                Password: <code>{inv.password}</code>
+              </p>
             </>
           )}
-          <p>
-            Password: <code>{inv.password}</code>
-          </p>
         </div>
       ))}
     </section>
