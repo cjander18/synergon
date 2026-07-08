@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { AggregationSpec, ElicitationSpec, Workflow } from '../domain/workflow';
 import { advanceRound } from '../application/advanceRound';
+import { AsyncButton } from './AsyncButton';
 import type { AppDeps } from './types';
 
 type QuestionKind = ElicitationSpec['kind'];
@@ -199,7 +200,9 @@ export function DraftRoundForm({
           </label>
         ))}
       </fieldset>
-      <button className="primary" onClick={() => void draft()}>Draft round</button>
+      <AsyncButton className="primary" busyLabel="Drafting…" onPress={draft}>
+        Draft round
+      </AsyncButton>
       {error !== '' && <p role="alert">{error}</p>}
     </section>
   );

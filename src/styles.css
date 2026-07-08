@@ -287,6 +287,23 @@ button:disabled {
   cursor: default;
 }
 
+button[aria-busy='true']::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  margin-right: var(--space-2);
+  animation: spin 600ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* ---------- workflow switcher ---------- */
 
 nav.workflows {
@@ -485,6 +502,7 @@ nav.workflows button.active {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+    animation: none !important;
   }
 }
 

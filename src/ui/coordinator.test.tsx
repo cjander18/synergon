@@ -226,6 +226,34 @@ describe('CoordinatorConsole', () => {
     expect(screen.queryByRole('button', { name: 'Load the demo workflow' })).toBeNull();
   });
 
+  it('shows an in-flight state and prevents double submit while issuing', async () => {
+    const base = makeDeps();
+    const deps = {
+      ...base,
+      // Slow the seal down so the pending window is observable.
+      crypto: {
+        seal: (args: Parameters<typeof base.crypto.seal>[0]) =>
+          new Promise<Awaited<ReturnType<typeof base.crypto.seal>>>((resolve) =>
+            setTimeout(() => resolve(base.crypto.seal(args)), 60),
+          ),
+        open: base.crypto.open.bind(base.crypto),
+      },
+    };
+    const user = userEvent.setup();
+    render(<CoordinatorConsole deps={deps} />);
+    await createWorkflowInUi(user);
+    await user.type(await screen.findByLabelText('Prompt'), 'p');
+    await user.click(screen.getByRole('button', { name: 'Draft round' }));
+    await user.click(await screen.findByRole('button', { name: 'Issue round' }));
+
+    const busy = (await screen.findByRole('button', { name: 'Issuing…' })) as HTMLButtonElement;
+    expect(busy.disabled).toBe(true);
+    await user.click(busy); // ignored — no double submit
+
+    expect(await screen.findAllByRole('link', { name: /invitation link/i })).toHaveLength(3);
+    expect(screen.queryByRole('button', { name: 'Issuing…' })).toBeNull();
+  });
+
   it('supports a subset audience for later rounds', async () => {
     const deps = makeDeps();
     const user = userEvent.setup();

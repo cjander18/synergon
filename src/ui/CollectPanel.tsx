@@ -4,6 +4,7 @@ import { decodeEnvelope } from '../adapters/envelopeCodec';
 import { importResponse } from '../application/importResponse';
 import { runConsolidation } from '../application/runConsolidation';
 import { audienceIds } from '../domain/workflow';
+import { AsyncButton } from './AsyncButton';
 import type { AppDeps } from './types';
 
 export function CollectPanel({
@@ -70,7 +71,7 @@ export function CollectPanel({
         value={pasted}
         onChange={(e) => setPasted(e.target.value)}
       />
-      <button onClick={() => void importOne()}>Import response</button>
+      <AsyncButton busyLabel="Importing…" onPress={importOne}>Import response</AsyncButton>
 
       {round.responses.length > 0 && (
         <>
@@ -91,9 +92,9 @@ export function CollectPanel({
               />
             </div>
           ))}
-          <button className="primary" onClick={() => void consolidate()}>
+          <AsyncButton className="primary" busyLabel="Consolidating…" onPress={consolidate}>
             Run consolidation
-          </button>
+          </AsyncButton>
         </>
       )}
 

@@ -3,6 +3,7 @@ import type { Workflow } from '../domain/workflow';
 import { createWorkflow } from '../application/createWorkflow';
 import { decodeWorkflow } from '../adapters/workflowCodec';
 import { buildDemoWorkflow } from './demo';
+import { AsyncButton } from './AsyncButton';
 import { WorkflowView } from './WorkflowView';
 import type { AppDeps } from './types';
 
@@ -73,9 +74,13 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
         value={participantsText}
         onChange={(e) => setParticipantsText(e.target.value)}
       />
-      <button className={firstRun ? 'primary' : ''} onClick={() => void create()}>
+      <AsyncButton
+        {...(firstRun ? { className: 'primary' } : {})}
+        busyLabel="Creating…"
+        onPress={create}
+      >
         Create workflow
-      </button>
+      </AsyncButton>
 
       <label htmlFor="import-workflow">Import a workflow (paste an exported file's contents)</label>
       <textarea
@@ -84,7 +89,7 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
         value={importText}
         onChange={(e) => setImportText(e.target.value)}
       />
-      <button onClick={() => void importWorkflow()}>Import workflow</button>
+      <AsyncButton busyLabel="Importing…" onPress={importWorkflow}>Import workflow</AsyncButton>
       <p className="hint">Importing replaces any existing workflow with the same id.</p>
       {error !== '' && <p role="alert">{error}</p>}
     </>
@@ -103,7 +108,7 @@ export function CoordinatorConsole({ deps }: { deps: AppDeps }) {
               New here? Load a finished example deliberation — three rounds from raw risk list
               to ranked shortlist — to see how Synergon works before inviting anyone.
             </p>
-            <button onClick={() => void loadDemo()}>Load the demo workflow</button>
+            <AsyncButton busyLabel="Loading…" onPress={loadDemo}>Load the demo workflow</AsyncButton>
           </section>
           <section className="card">
             <h2>New workflow</h2>

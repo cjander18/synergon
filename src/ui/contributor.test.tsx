@@ -86,6 +86,25 @@ async function unlock() {
   await userEvent.click(screen.getByRole('button', { name: 'Unlock' }));
 }
 
+describe('ContributorView — in-flight states', () => {
+  it('shows a pending Unlock while the key derives', async () => {
+    const slow = {
+      seal: crypto.seal.bind(crypto),
+      open: (...args: Parameters<typeof crypto.open>) =>
+        new Promise<Awaited<ReturnType<typeof crypto.open>>>((resolve) =>
+          setTimeout(() => resolve(crypto.open(...args)), 60),
+        ),
+    };
+    render(<ContributorView crypto={slow} envelope={await invitation()} />);
+    await userEvent.type(screen.getByLabelText('Password'), 'pw-1');
+    await userEvent.click(screen.getByRole('button', { name: 'Unlock' }));
+
+    const busy = screen.getByRole('button', { name: 'Unlocking…' }) as HTMLButtonElement;
+    expect(busy.disabled).toBe(true);
+    expect(await screen.findByText('List the top risks')).toBeTruthy();
+  });
+});
+
 describe('ContributorView — Score rounds', () => {
   const spec = {
     instruction: 'Score these risks',

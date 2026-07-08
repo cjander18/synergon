@@ -6,6 +6,7 @@ import { issueRound } from '../application/issueRound';
 import { reissueInvitations } from '../application/reissueInvitations';
 import { cancelRound } from '../application/cancelRound';
 import { encodeWorkflow } from '../adapters/workflowCodec';
+import { AsyncButton } from './AsyncButton';
 import { CollectPanel } from './CollectPanel';
 import { DraftRoundForm } from './DraftRoundForm';
 import { InvitationsPanel } from './InvitationsPanel';
@@ -98,9 +99,9 @@ export function WorkflowView({
         <section>
           <RoundHead index={current.index} status={current.status} />
           {current.status === 'Draft' && (
-            <button className="primary" onClick={() => void issue(current)}>
+            <AsyncButton className="primary" busyLabel="Issuing…" onPress={() => issue(current)}>
               Issue round
-            </button>
+            </AsyncButton>
           )}
           {(current.status === 'Issued' || current.status === 'Collecting') && (
             <>
@@ -113,7 +114,9 @@ export function WorkflowView({
                   passwords for anyone who has not yet responded.
                 </p>
               )}
-              <button onClick={() => void reissue(current)}>Re-issue invitations</button>
+              <AsyncButton busyLabel="Re-issuing…" onPress={() => reissue(current)}>
+                Re-issue invitations
+              </AsyncButton>
               <CollectPanel
                 deps={deps}
                 workflow={workflow}
@@ -124,9 +127,13 @@ export function WorkflowView({
             </>
           )}
           {confirmingCancel ? (
-            <button className="danger" onClick={() => void cancel(current)}>
+            <AsyncButton
+              className="danger"
+              busyLabel="Discarding…"
+              onPress={() => cancel(current)}
+            >
               Discard round {current.index + 1} — this cannot be undone
-            </button>
+            </AsyncButton>
           ) : (
             <button className="danger-outline" onClick={() => setConfirmingCancel(true)}>
               Cancel round

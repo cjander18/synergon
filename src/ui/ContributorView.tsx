@@ -5,6 +5,7 @@ import type { ElicitationSpec } from '../domain/workflow';
 import type { PromptSpec } from '../domain/strategies/types';
 import { elicitationFor } from '../domain/strategies/registry';
 import { encodeEnvelope } from '../adapters/envelopeCodec';
+import { AsyncButton } from './AsyncButton';
 import { utf8Decode, utf8Encode } from '../shared/utf8';
 
 // Sam's whole journey: enter the out-of-band password, read the decrypted
@@ -123,7 +124,9 @@ export function ContributorView({
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="primary" onClick={() => void unlock()}>Unlock</button>
+          <AsyncButton className="primary" busyLabel="Unlocking…" onPress={unlock}>
+            Unlock
+          </AsyncButton>
         </section>
       ) : (
         <section className="card">
@@ -184,7 +187,13 @@ export function ContributorView({
             </>
           )}
 
-          <button className="primary" onClick={() => void encryptResponse(prompt)}>Encrypt response</button>
+          <AsyncButton
+            className="primary"
+            busyLabel="Encrypting…"
+            onPress={() => encryptResponse(prompt)}
+          >
+            Encrypt response
+          </AsyncButton>
         </section>
       )}
 
