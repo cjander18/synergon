@@ -4,6 +4,7 @@ import { createWorkflow } from '../application/createWorkflow';
 import { decodeWorkflow } from '../adapters/workflowCodec';
 import { buildDemoWorkflow } from './demo';
 import { AsyncButton } from './AsyncButton';
+import { FeedbackFooter } from './FeedbackFooter';
 import { WorkflowView } from './WorkflowView';
 import type { AppDeps } from './types';
 
@@ -176,6 +177,8 @@ export function CoordinatorConsole({
       {selected !== undefined && (
         <WorkflowView deps={deps} workflow={selected} onChange={onWorkflowChange} />
       )}
+
+      <FeedbackFooter view="coordinator" />
     </main>
   );
 }

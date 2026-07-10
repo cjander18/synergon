@@ -6,6 +6,7 @@ import type { PromptSpec } from '../domain/strategies/types';
 import { elicitationFor } from '../domain/strategies/registry';
 import { encodeEnvelope } from '../adapters/envelopeCodec';
 import { AsyncButton } from './AsyncButton';
+import { FeedbackFooter } from './FeedbackFooter';
 import { utf8Decode, utf8Encode } from '../shared/utf8';
 
 // Sam's whole journey: enter the out-of-band password, read the decrypted
@@ -206,6 +207,8 @@ export function ContributorView({
           <p>Send this text back to your coordinator the same way the link reached you.</p>
         </section>
       )}
+
+      <FeedbackFooter view="contributor" />
     </main>
   );
 }

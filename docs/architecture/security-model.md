@@ -83,6 +83,15 @@ storage (see [domain-model.md](domain-model.md)).
 - No passwords or derived keys are persisted. Re-opening a workflow that still has
   encrypted, un-imported responses requires the relevant passwords again.
 
+## No phoning home
+
+The application makes **no network requests of its own** — no telemetry, no
+analytics, no error reporting, no update checks. Beyond fetching its own static
+assets on load, nothing leaves the device unless the user explicitly carries it
+(an envelope) or clicks a clearly labeled external link (the feedback email or
+GitHub links in the footer). Any future change to this is a change to the
+product's trust contract and gets an ADR, not a quiet commit.
+
 ## Threat model summary
 
 | Adversary | Can they? | Why / mitigation |

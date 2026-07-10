@@ -497,6 +497,20 @@ nav.workflows button.active {
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- feedback footer ---------- */
+
+footer.feedback {
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-default);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+footer.feedback p {
+  margin: var(--space-1) 0;
+}
+
 /* ---------- motion & responsiveness ---------- */
 
 @media (prefers-reduced-motion: reduce) {

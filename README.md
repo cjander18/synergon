@@ -29,6 +29,14 @@ approved. See the [roadmap](docs/roadmap.md).
 - **Anonymous to peers** — the bias-reduction guarantee the MVP makes. See
   [ADR-0003](docs/architecture/adr/0003-anonymity-scope.md).
 
+## Feedback
+
+We read everything. Email **synergonlabs@gmail.com**, or open a
+[bug report or idea](https://github.com/cjander18/synergon/issues/new/choose).
+Feedback is always an explicit action on your part — the app itself never
+sends anything anywhere (see the
+[security model](docs/architecture/security-model.md)).
+
 ## Documentation map
 
 | Doc | What it covers |

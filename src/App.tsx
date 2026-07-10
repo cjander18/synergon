@@ -1,5 +1,6 @@
 import { decodeEnvelope } from './adapters/envelopeCodec';
 import { ContributorView } from './ui/ContributorView';
+import { FeedbackFooter } from './ui/FeedbackFooter';
 import { CoordinatorConsole } from './ui/CoordinatorConsole';
 import type { AppDeps } from './ui/types';
 
@@ -23,6 +24,7 @@ export function App({ deps, initialHash }: { deps: AppDeps; initialHash: string 
         This link is not a valid Synergon envelope. Ask your coordinator for a fresh invitation
         link.
       </p>
+      <FeedbackFooter view="invalid link" />
     </main>
   );
 }
