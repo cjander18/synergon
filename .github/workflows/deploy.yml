@@ -1,13 +1,21 @@
 name: test-and-deploy
 
+# Deploys run from mvp-foundation: it is the repo's default branch and the
+# only branch the auto-created github-pages environment allows. If the default
+# branch ever flips to main, add main to the environment's allowed branches
+# (Settings -> Environments -> github-pages) and switch DEPLOY_REF below.
 on:
   push:
-    branches: [main]
+    branches: [main, mvp-foundation]
   pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   verify:
@@ -23,12 +31,12 @@ jobs:
       - run: npm run typecheck
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/mvp-foundation'
         with:
           path: dist
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/mvp-foundation'
     needs: verify
     runs-on: ubuntu-latest
     permissions:
