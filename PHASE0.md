@@ -10,7 +10,7 @@
 | 2 | Invitation re-issue for a live round | done | Fresh passwords for non-respondents only; responses untouched |
 | 3 | Close/abandon a zero-response round | done | `Cancelled` status + Cancel round button from any live state |
 | 4 | Workflow export/import | done | Versioned JSON codec (binary as base64url); download w/ copy fallback |
-| 5 | Static-host deploy | blocked-on-user | CI verify passes on GitHub; two admin clicks remain (below) |
+| 5 | Static-host deploy | done | Pages enabled (Source: GitHub Actions); site at cjander18.github.io/synergon |
 | 6 | Landing page | done | Static landing at `/`, app at `/app.html`; honest-anonymity section |
 | 7 | In-app demo workflow | done | Built through the real reducer; offered when console is empty |
 | 8 | License decision executed | done | MIT shipped (LICENSE + package.json) |
@@ -64,3 +64,6 @@
 - 2026-07-06 — blocker 5: CI live, verify green on GitHub; `main` created;
   Pages + default-branch switch need Clinton (PAT lacks admin). Name sanity
   pass done (see open decisions). Remaining: blockers 1 and 5's two clicks.
+- 2026-07-10 — blocker 5 closed: Pages enabled by Clinton; deploy verified live.
+  Note: default branch is still `mvp-foundation` — cosmetic only, deploys
+  trigger on `main` pushes; flip it in Settings → General when convenient.
