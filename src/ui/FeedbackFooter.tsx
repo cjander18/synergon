@@ -28,7 +28,8 @@ export function FeedbackFooter({ view }: { view?: string }) {
         <a href={`${REPO}/issues/new/choose`}>Report a problem on GitHub</a>
       </p>
       <p className="hint">
-        Feedback is an explicit action — this app never sends anything anywhere on its own.
+        Feedback is an explicit action — this app never sends anything anywhere on its own (
+        <a href="./privacy.html">privacy</a>).
       </p>
     </footer>
   );

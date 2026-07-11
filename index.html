@@ -53,6 +53,14 @@
         border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
         margin-left: 0.75rem;
       }
+      video.demo {
+        display: block;
+        width: 100%;
+        max-width: 44rem;
+        margin: 2.5rem auto 0;
+        border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+        border-radius: 10px;
+      }
       section {
         margin-top: 3rem;
       }
@@ -127,8 +135,18 @@
           peers, consolidate, clarify, then rank — so decisions reflect your group's judgment,
           not its hierarchy. The method is Delphi; the spreadsheet is gone.
         </p>
-        <a class="cta" href="./app.html">Open Synergon — free</a>
+        <a class="cta" href="./app.html" data-goatcounter-click="open-app">Open Synergon — free</a>
         <a class="cta secondary" href="https://github.com/cjander18/synergon">Source on GitHub</a>
+        <video
+          class="demo"
+          src="./demo.mp4"
+          poster="./demo-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          aria-label="A finished three-round Synergon deliberation: listed risks deduplicated, consolidated with support counts, then ranked"
+        ></video>
       </header>
 
       <section>
@@ -202,8 +220,13 @@
           · <a href="https://github.com/cjander18/synergon/issues/new/choose">Open an issue</a>
         </p>
         <p>
+          Want updates? <a href="mailto:synergonlabs@gmail.com?subject=subscribe">Email us “subscribe”</a>
+          or <a href="https://github.com/cjander18/synergon">watch the repo</a> — no forms, no list you didn't ask for.
+        </p>
+        <p>
           Synergon is open source (MIT) ·
           <a href="https://github.com/cjander18/synergon">GitHub</a> ·
+          <a href="./privacy.html">Privacy</a> ·
           <a href="https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md"
             >Security model</a
           >
@@ -211,5 +234,6 @@
         </p>
       </footer>
     </div>
+    <script data-goatcounter="https://synergon.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   </body>
 </html>

@@ -6,14 +6,14 @@
 
 | # | Gap | Status | Notes |
 |---|-----|--------|-------|
-| 1 | Landing analytics (privacy-respecting) | todo | Landing page ONLY — the app's no-phoning-home contract is untouchable |
+| 1 | Landing analytics (privacy-respecting) | blocked-on-user | GoatCounter wired on landing+privacy pages only, `open-app` click event = funnel numerator; needs the `synergon` code registered at goatcounter.com |
 | 2 | React error boundary | done | Fallback shows error, feedback mailto, reload; data-is-safe reassurance |
 | 3 | Mobile contributor/coordinator pass | done | Recorded full loop at 390px: clean, 0 errors, no fixes needed |
 | 4 | Copy buttons on the critical path | done | CopyButton w/ Copied✓ + manual-copy fallback |
-| 5 | Demo video for landing hero | todo | Cut from a scripted recording (no ffmpeg on this machine — see notes) |
-| 6 | Email capture / updates channel | todo | Zero-infra: mailto-subscribe + watch-repo links; provider still an open decision |
+| 5 | Demo video for landing hero | done | 12.5s / 91KB mp4 + poster via hero-video.mjs + ffmpeg-static; embedded |
+| 6 | Email capture / updates channel | done | mailto-subscribe + watch-repo in landing footer; provider still open |
 | 7 | Design-partner kit | todo | Outreach template, onboarding steps, debrief script |
-| 8 | Privacy page | todo | Says in plain words what we collect: nothing (app), cookie-less counts (landing) |
+| 8 | Privacy page | done | privacy.html: app collects nothing; landing counts cookie-less; changes need an ADR |
 | 9 | Export nudge (storage eviction) | done | Hint under Export once rounds exist |
 | 10 | Workflow schema version field | done | v:1 on Workflow, validated on import |
 | 11 | Crypto review-status honesty | todo | security-model.md states self-implemented, not audited, review invited |

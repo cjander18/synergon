@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synergon — privacy</title>
+    <meta name="description" content="What Synergon collects: nothing from the app; anonymous, cookie-less visit counts on this website only." />
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+      body { margin: 0; }
+      .wrap { max-width: 42rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.2rem; margin-top: 2rem; }
+      a { color: #2563eb; }
+      footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent); font-size: 0.9rem; opacity: 0.8; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Privacy</h1>
+      <p>The short version: <strong>the Synergon app collects nothing.</strong></p>
+
+      <h2>The app</h2>
+      <p>
+        Everything you do in the app — workflows, rounds, responses — is stored in your own
+        browser and nowhere else. The app makes no network requests of its own: no analytics, no
+        telemetry, no error reporting, no accounts. Responses travel between people as
+        end-to-end encrypted envelopes that you carry yourself (a link, a file, or a QR code).
+        The full <a href="https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md">threat model is public</a>,
+        and so is <a href="https://github.com/cjander18/synergon">all of the source code</a>.
+      </p>
+      <p>
+        One honest boundary, stated everywhere in the product: responses are anonymous
+        <em>to other participants</em>. The coordinator who sends the invitations knows who
+        received each link.
+      </p>
+
+      <h2>This website</h2>
+      <p>
+        The marketing pages (this page and the landing page — not the app) count visits with
+        <a href="https://www.goatcounter.com/">GoatCounter</a>, an open-source, cookie-less
+        counter. It records that a page was viewed and which button was clicked, without
+        cookies, fingerprinting, or personal identification. We use it to answer exactly one
+        question: do people who read the landing page go on to open the app?
+      </p>
+
+      <h2>Email</h2>
+      <p>
+        If you write to synergonlabs@gmail.com, that's normal email: we read it, we may reply,
+        and it stays in the mailbox. We don't add you to any list unless you ask for updates,
+        and you can ask to be removed at any time.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        Any change to what is collected — especially anything touching the app's
+        collects-nothing guarantee — will be recorded in the project's public
+        <a href="https://github.com/cjander18/synergon/tree/main/docs/architecture/adr">architecture decision records</a>
+        before it ships.
+      </p>
+
+      <footer>
+        <a href="./index.html">← Back to Synergon</a>
+      </footer>
+    </div>
+    <script data-goatcounter="https://synergon.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  </body>
+</html>
