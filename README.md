@@ -56,3 +56,4 @@ sends anything anywhere (see the
 | [gtm/launch-plan.md](docs/gtm/launch-plan.md) | Launch blockers, phases, channels, metrics, open decisions |
 | [gtm/design-partner-kit.md](docs/gtm/design-partner-kit.md) | Outreach, onboarding, and debrief script for design partners |
 | [gtm/launch-contingencies.md](docs/gtm/launch-contingencies.md) | Best/worst-case launch runbook with exact commands |
+| [gtm/paid-tier-plan.md](docs/gtm/paid-tier-plan.md) | The hosted-relay tier: features, pricing, payment infra, gates |
