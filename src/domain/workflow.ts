@@ -93,6 +93,9 @@ export interface Round {
 }
 
 export interface Workflow {
+  // Persisted-schema version. Bump on any breaking shape change and migrate
+  // at the persistence boundary; stored data outlives deploys.
+  readonly v: 1;
   readonly id: Id;
   readonly title: string;
   readonly participants: readonly Participant[];
@@ -110,6 +113,7 @@ export function createWorkflow(params: {
   const ids = new Set(params.participants.map((p) => p.id));
   if (ids.size !== params.participants.length) return err('duplicate participant ids');
   return ok({
+    v: 1,
     id: params.id,
     title: params.title,
     participants: params.participants,

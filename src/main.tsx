@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { AppErrorBoundary } from './ui/AppErrorBoundary';
 import { CopyPasteChannel } from './adapters/copyPasteChannel';
 import { IndexedDbWorkflowRepository } from './adapters/indexedDbWorkflowRepository';
 import { CryptoRandomIdGen, CryptoRandomPasswordGen } from './adapters/randomGenerators';
@@ -21,6 +22,8 @@ if (!rootElement) throw new Error('Root element #root not found');
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App deps={deps} initialHash={location.hash} />
+    <AppErrorBoundary>
+      <App deps={deps} initialHash={location.hash} />
+    </AppErrorBoundary>
   </StrictMode>,
 );

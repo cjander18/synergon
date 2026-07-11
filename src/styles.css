@@ -497,6 +497,21 @@ nav.workflows button.active {
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- copy buttons ---------- */
+
+.copy-row {
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+button.copy {
+  margin-top: 0;
+  min-height: 26px;
+  padding: 2px 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
 /* ---------- feedback footer ---------- */
 
 footer.feedback {

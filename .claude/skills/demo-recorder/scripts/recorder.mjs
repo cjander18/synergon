@@ -14,7 +14,7 @@ const slug = (text) =>
     .replace(/^-|-$/g, '')
     .slice(0, 60);
 
-export async function createRecorder({ name, baseUrl, outDir, headless = true }) {
+export async function createRecorder({ name, baseUrl, outDir, headless = true, viewport }) {
   const dir = outDir ?? path.join('demo-recordings', `${name}-${timestamp()}`);
   await mkdir(path.join(dir, 'shots'), { recursive: true });
   await mkdir(path.join(dir, 'video'), { recursive: true });
@@ -28,9 +28,10 @@ export async function createRecorder({ name, baseUrl, outDir, headless = true })
   async function actor(actorName) {
     const existing = actors.get(actorName);
     if (existing) return existing.page;
+    const size = viewport ?? { width: 1280, height: 800 };
     const context = await browser.newContext({
-      viewport: { width: 1280, height: 800 },
-      recordVideo: { dir: path.join(dir, 'video'), size: { width: 1280, height: 800 } },
+      viewport: size,
+      recordVideo: { dir: path.join(dir, 'video'), size },
     });
     const page = await context.newPage();
     page.on('console', (msg) => {

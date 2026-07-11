@@ -79,6 +79,12 @@ export function WorkflowView({
     <article>
       <h2>{workflow.title}</h2>
       <button onClick={exportWorkflow}>Export workflow</button>
+      {workflow.rounds.length > 0 && (
+        <p className="hint">
+          This workflow lives only in this browser, and browsers can evict local storage after
+          long inactivity — export a backup after important rounds.
+        </p>
+      )}
       {exportText !== '' && (
         <>
           <label htmlFor="export-workflow">Exported workflow (save this text as a file)</label>

@@ -41,6 +41,7 @@ export function decodeWorkflow(text: string): Result<Workflow> {
   const workflow = envelope.workflow as Partial<Workflow> | undefined;
   if (
     workflow === undefined ||
+    workflow.v !== 1 ||
     typeof workflow.id !== 'string' ||
     typeof workflow.title !== 'string' ||
     !Array.isArray(workflow.participants) ||

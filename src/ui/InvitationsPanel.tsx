@@ -1,5 +1,6 @@
 import type { Workflow } from '../domain/workflow';
 import type { IssuedInvitation } from '../application/issueRound';
+import { CopyButton } from './CopyButton';
 import { Qr } from './Qr';
 
 // Passwords appear here once and are never persisted (security-model.md):
@@ -25,6 +26,10 @@ export function InvitationsPanel({
           {inv.handle.kind === 'url' ? (
             <>
               <a href={inv.handle.url}>Invitation link</a>
+              <span className="copy-row">
+                <CopyButton text={inv.handle.url} label="Copy link" />
+                <CopyButton text={inv.password} label="Copy password" />
+              </span>
               <p>
                 Password: <code>{inv.password}</code>
               </p>
