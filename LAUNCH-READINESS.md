@@ -12,13 +12,13 @@
 | 4 | Copy buttons on the critical path | done | CopyButton w/ Copied✓ + manual-copy fallback |
 | 5 | Demo video for landing hero | done | 12.5s / 91KB mp4 + poster via hero-video.mjs + ffmpeg-static; embedded |
 | 6 | Email capture / updates channel | done | mailto-subscribe + watch-repo in landing footer; provider still open |
-| 7 | Design-partner kit | todo | Outreach template, onboarding steps, debrief script |
+| 7 | Design-partner kit | done | docs/gtm/design-partner-kit.md incl. the Phase-2 gate |
 | 8 | Privacy page | done | privacy.html: app collects nothing; landing counts cookie-less; changes need an ADR |
 | 9 | Export nudge (storage eviction) | done | Hint under Export once rounds exist |
 | 10 | Workflow schema version field | done | v:1 on Workflow, validated on import |
-| 11 | Crypto review-status honesty | todo | security-model.md states self-implemented, not audited, review invited |
-| 12 | Launch contingencies (best & worst case) | todo | Concrete runbook: hotfix path, rollback commands, pull-the-app procedure |
-| 13 | CHECKPOINT.md refresh | todo | Stale claims (export/CI listed as gaps — both long done) |
+| 11 | Crypto review-status honesty | done | Review-status section added; adversarial review invited |
+| 12 | Launch contingencies (best & worst case) | done | docs/gtm/launch-contingencies.md + pre-drafted offline notice + drill |
+| 13 | CHECKPOINT.md refresh | done | Rewritten to launch-ready state, blocked-on-Clinton list ordered by value |
 
 ## Carried over (humans only)
 
@@ -34,3 +34,5 @@
 ## Log
 
 - 2026-07-10 — tracker created; work begins.
+- 2026-07-10 — items 2,3,4,9,10 (hardening), 1,5,6,8 (web), 7,11,12,13 (docs)
+  closed. 12/13 done; item 1 blocked on the GoatCounter account.

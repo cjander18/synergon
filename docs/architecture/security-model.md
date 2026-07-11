@@ -83,6 +83,18 @@ storage (see [domain-model.md](domain-model.md)).
 - No passwords or derived keys are persisted. Re-opening a workflow that still has
   encrypted, un-imported responses requires the relevant passwords again.
 
+## Review status — read this before relying on the crypto
+
+The cryptography uses standard, well-worn constructions (PBKDF2-SHA256 key
+derivation, AES-256-GCM authenticated encryption, both via the browser's Web
+Crypto API — no custom primitives, no third-party crypto code). It has **not
+been independently audited**: it was designed and implemented by the project
+itself, with automated tests for round-trips, wrong-password rejection, and
+header/ciphertext tamper detection. Treat the guarantees accordingly, and if
+you have the expertise, adversarial review is actively invited — the
+implementation is ~150 lines in `src/adapters/webCryptoService.ts` and issues
+are open.
+
 ## No phoning home
 
 The application makes **no network requests of its own** — no telemetry, no

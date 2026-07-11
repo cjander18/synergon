@@ -54,3 +54,5 @@ sends anything anywhere (see the
 | [gtm/strategy.md](docs/gtm/strategy.md) | Go-to-market: model validation, positioning, pricing ladder |
 | [gtm/personas.md](docs/gtm/personas.md) | GTM personas: the beachhead, the multiplier, the future buyer |
 | [gtm/launch-plan.md](docs/gtm/launch-plan.md) | Launch blockers, phases, channels, metrics, open decisions |
+| [gtm/design-partner-kit.md](docs/gtm/design-partner-kit.md) | Outreach, onboarding, and debrief script for design partners |
+| [gtm/launch-contingencies.md](docs/gtm/launch-contingencies.md) | Best/worst-case launch runbook with exact commands |
