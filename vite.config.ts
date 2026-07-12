@@ -12,6 +12,8 @@ export default defineConfig({
         landing: 'index.html',
         app: 'app.html',
         privacy: 'privacy.html',
+        faq: 'faq.html',
+        compare: 'compare.html',
       },
     },
   },

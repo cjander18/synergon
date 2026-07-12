@@ -20,6 +20,21 @@
 | 12 | Launch contingencies (best & worst case) | done | docs/gtm/launch-contingencies.md + pre-drafted offline notice + drill |
 | 13 | CHECKPOINT.md refresh | done | Rewritten to launch-ready state, blocked-on-Clinton list ordered by value |
 
+## Attention-infrastructure additions (2026-07-11, after the playbook review)
+
+| # | Item | Status | Notes |
+|---|------|--------|-------|
+| 14 | Thesis / launch essay (category wedge + canonical proof) | done | docs/gtm/launch-essay.md — one text, four uses; frame: peer-anonymous, multi-round, no server |
+| 15 | FAQ + comparison pages, llms.txt, JSON-LD (AI discoverability) | done | faq.html, compare.html (honest choose-them-when column), public/llms.txt, schema.org on landing |
+| 16 | Barbell content restructure | done | launch-plan Phase 3: monthly anchor → weekly fragments → owned list |
+| 17 | Newsletter → pre-launch decision | blocked-on-user | Buttondown recommended (free ≤100 subs, no tracking pixels); needs account |
+| 18 | Insiders tier + partner circle | done | design-partners skill: 3–5 curated method voices; circle move post-gate |
+| 19 | Third-party frame-repetition signal | done | launch-week skill: `frame-repeat` ledger tag, ≥5/wk-1 threshold |
+
+Deliberately NOT adopted from the playbook: investor-facing measurement,
+curated dinners/events, video/podcast cadence, paid attention — wrong stage,
+wrong economics, wrong scoreboard.
+
 ## Carried over (humans only)
 
 - **Smoke test** (PHASE0 blocker 1) — now best run against the live site,
@@ -36,3 +51,5 @@
 - 2026-07-10 — tracker created; work begins.
 - 2026-07-10 — items 2,3,4,9,10 (hardening), 1,5,6,8 (web), 7,11,12,13 (docs)
   closed. 12/13 done; item 1 blocked on the GoatCounter account.
+- 2026-07-11 — attention-playbook review: items 14–19 added; 14/15/16/18/19
+  done same day, 17 (newsletter account) on Clinton.

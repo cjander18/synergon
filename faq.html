@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synergon — FAQ</title>
+    <meta name="description" content="Straight answers: how peer-anonymity works, where your data lives, what's free, how encrypted envelopes travel, and what the honest limitations are." />
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+      body { margin: 0; }
+      .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.15rem; margin-top: 2rem; }
+      a { color: #2563eb; }
+      footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent); font-size: 0.9rem; opacity: 0.8; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Frequently asked questions</h1>
+
+      <h2>What is Synergon?</h2>
+      <p>
+        A free web app for structured group deliberation: a coordinator poses a question, team
+        members answer <strong>anonymously to their peers</strong>, the coordinator consolidates
+        the pooled answers, and the group refines and ranks them over multiple rounds
+        (the Delphi method / Nominal Group Technique). It runs entirely in the browser —
+        no server, no accounts.
+      </p>
+
+      <h2>How anonymous is it, exactly?</h2>
+      <p>
+        Anonymous <strong>to other participants</strong>: responses are pooled with identities
+        stripped before anyone evaluates anything, so no colleague can tell who said what — that
+        is what removes anchoring, seniority bias, and self-censorship. One honest boundary: the
+        coordinator who sends the invitations knows who received each link. We never claim more
+        than that; the full <a href="https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md">threat model is public</a>.
+      </p>
+
+      <h2>Where does my data live?</h2>
+      <p>
+        In your own browser (IndexedDB), and nowhere else. The app makes no network requests —
+        no telemetry, no analytics, no accounts. Responses travel between people as end-to-end
+        encrypted envelopes carried by the users themselves (a link, a file, or a QR code), and
+        each envelope's password travels separately, out of band.
+      </p>
+
+      <h2>Is it really free? What's the catch?</h2>
+      <p>
+        The local product is complete and free, forever — and there's a structural reason to
+        believe that: serving a static page costs us nothing per user. The boundary is
+        principled: anything that runs on your device stays free; paid tiers, when they exist,
+        will only ever add hosted convenience (like links that deliver themselves through a
+        relay that sees only ciphertext). The honest catch today: <strong>you carry the
+        envelopes yourself</strong> — copy a link out, paste a response back, each round.
+      </p>
+
+      <h2>What happens if I clear my browser or switch computers?</h2>
+      <p>
+        Local storage is the database, so clearing it removes your workflows — and some browsers
+        (notably Safari) can evict site storage after about a week of inactivity. Use the
+        <em>Export workflow</em> button for a backup file you can re-import anywhere. Exports
+        contain only what's stored: ciphertext, never passwords.
+      </p>
+
+      <h2>How does the encryption work?</h2>
+      <p>
+        Standard constructions via the browser's built-in Web Crypto API: PBKDF2-SHA256 key
+        derivation from a per-participant password, AES-256-GCM authenticated encryption, with
+        routing headers authenticated so envelopes can't be tampered with or misrouted. No
+        custom primitives, no third-party crypto code. Honest status: it has <strong>not been
+        independently audited</strong> — the implementation is ~150 lines, open source, and
+        adversarial review is invited.
+      </p>
+
+      <h2>Does it work offline / on phones / from a file?</h2>
+      <p>
+        Yes. Answering and consolidating need no connectivity — only moving envelopes between
+        people does, and that happens over your own channels. The interface works on phones
+        (contributors usually open links there), and the app can even be run from a local file.
+      </p>
+
+      <h2>What does this website collect?</h2>
+      <p>
+        The marketing pages (not the app) count visits with a cookie-less, open-source counter.
+        The app itself collects nothing. Details on the <a href="./privacy.html">privacy page</a>.
+      </p>
+
+      <h2>How many rounds does a deliberation take?</h2>
+      <p>
+        Typically two or three: collect ideas → consolidate and clarify → rank or score. The
+        built-in demo workflow shows a complete three-round arc in about two minutes of reading.
+      </p>
+
+      <footer>
+        <a href="./index.html">← Synergon</a> · <a href="./compare.html">How it compares</a> ·
+        <a href="./privacy.html">Privacy</a> · <a href="https://github.com/cjander18/synergon">GitHub</a>
+      </footer>
+    </div>
+    <script data-goatcounter="https://synergon.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  </body>
+</html>

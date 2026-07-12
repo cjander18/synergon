@@ -142,6 +142,15 @@ Every section below follows the same shape: **principle → why → mechanical a
 
 **Why.** Mid-launch you will be sleep-deprived and emotionally invested; every metric will look like whatever you need it to look like. Pre-committed thresholds are the only defense. Synergon has no telemetry — by design — so these run on landing analytics (Plausible), GitHub stars, inbound volume, and the ledger.
 
+**The wedge signal — third-party repetition.** Track every time someone
+who isn't us describes Synergon as some variant of "peer-anonymous /
+multi-round / no server" **unprompted** (comments, posts, emails). Tag these
+`frame-repeat` in the ledger. It costs nothing to log and is the earliest
+indicator the category frame is taking: ≥5 independent frame-repeats in week
+1 means the positioning carries itself; zero means we're describing a product
+but not planting a frame — rework the essay's framing before the next
+channel push.
+
 **Week-1 leading indicators** (derived from launch-plan.md's 90-day targets: 25% landing→app-open, 300+ opens/wk, 500 stars, 500 newsletter):
 
 | 90-day target | Week-1 leading indicator (healthy) |

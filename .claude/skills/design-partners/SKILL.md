@@ -58,6 +58,19 @@ Every section follows the house shape: **principle → why → mechanical action
 
 ---
 
+### The insiders tier (beyond partners)
+
+Partners falsify the product; **insiders move the market's belief**. Keep a
+separate short list (3–5 names) of facilitation-world voices — SessionLab
+contributors, Liberating Structures practitioners, a Delphi-method academic —
+who are NOT asked to run sessions. The mechanical action: one personalized
+note each, early access framed as "tell me where this misrepresents the
+method," and a walkthrough call if they bite. The number: 3–5 total, ever —
+this is curation, not a funnel. After the Phase-2 gate passes, make the
+**circle move**: offer to connect willing partners to each other (a simple
+group email thread) — peer proof compounds, and the thread becomes launch
+week's first supportive commenters.
+
 ## 2. Pipeline arithmetic
 
 **Principle.** Work backward from 8–12 seated partners to the required top of funnel, and let stage-conversion numbers — not optimism — set the outreach volume.

@@ -64,9 +64,15 @@ Coordinated burst, all channels pointing at the landing page:
 
 ## Phase 3 — Content engine (steady state, starts week after launch)
 
-The moat is the method. [concepts.md](../concepts.md) is a content calendar in
-disguise — one piece per bias/method, each ending in "run this in Synergon in
-10 minutes":
+Structured as a **barbell**: a deep monthly anchor piece on one end, light
+weekly fragments on the other, and an **owned newsletter** underneath so spike
+attention becomes retained audience instead of evaporating. The
+[launch essay](launch-essay.md) is anchor #0 and newsletter issue #1; each
+month's anchor gets repurposed into 3–4 short posts (LinkedIn + the matching
+subreddit) during the following weeks — depth becomes reach without new
+material. The moat is the method. [concepts.md](../concepts.md) is a content
+calendar in disguise — one piece per bias/method, each ending in "run this in
+Synergon in 10 minutes":
 
 - "Why your retro produced the loudest person's opinion" (anchoring/HiPPO)
 - "The Delphi method for product teams, minus the spreadsheet"
@@ -109,8 +115,12 @@ by asking:
 3. **Demo asset format.** GIF on landing vs. 90-second video vs. interactive
    seeded workflow (#7 above). Recommendation: seeded workflow + GIF; skip
    video production for launch.
-4. **Newsletter/community home.** Email list only (recommended at this scale)
-   vs. Discord/Slack community. Communities demand daily tending; defer.
+4. **Newsletter/community home.** Email list, and UPGRADED to pre-launch
+   (2026-07-11, barbell rationale): an owned list is what converts launch
+   spikes into retained demand. Recommended provider: Buttondown (free ≤100
+   subs, no tracking pixels — consistent with the trust posture;
+   marketing-side only, like GoatCounter). Needs an account (Clinton).
+   Discord/Slack community still deferred — daily tending.
 
 ## What we deliberately are NOT doing
 

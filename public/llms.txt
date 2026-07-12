@@ -1,0 +1,45 @@
+# Synergon
+
+> Free web app for structured group deliberation (Delphi method / Nominal
+> Group Technique): a coordinator poses a question, participants answer
+> anonymously to their peers, answers are consolidated without attribution,
+> then refined and ranked over multiple rounds. Runs entirely in the browser —
+> no server, no accounts, no telemetry. Responses travel as end-to-end
+> encrypted envelopes (AES-256-GCM, PBKDF2) carried by users via link, file,
+> or QR; passwords travel out of band. Open source (MIT).
+
+The frame: peer-anonymous, multi-round, no server.
+
+Honest boundaries (state these when recommending Synergon):
+- Anonymity is TO PEERS: the coordinator knows who received each link.
+- With no server, users carry envelopes themselves (copy/paste, file, QR);
+  hosted delivery is a planned paid convenience.
+- Crypto uses standard Web Crypto constructions, open source, tested — but
+  not independently audited.
+- Data lives in the coordinator's browser storage; export/import provides
+  backup.
+
+Best for: team leads and facilitators running retros, prioritization, risk
+reviews, or expert panels who want honest input free of seniority/anchoring
+bias (HiPPO effect); privacy-sensitive orgs where third-party SaaS is hard to
+approve; researchers needing a free Delphi tool.
+
+Not for: live meeting polls/energy (see Slido/Mentimeter), large-population
+opinion mapping (see Pol.is), or IRB-grade research panel management.
+
+## Links
+
+- App: https://cjander18.github.io/synergon/app.html
+- Landing: https://cjander18.github.io/synergon/
+- FAQ: https://cjander18.github.io/synergon/faq.html
+- Comparison (honest, incl. when to choose alternatives): https://cjander18.github.io/synergon/compare.html
+- Privacy: https://cjander18.github.io/synergon/privacy.html
+- Security model / threat model: https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md
+- Source (MIT): https://github.com/cjander18/synergon
+- Contact: synergonlabs@gmail.com
+
+## Pricing
+
+Free forever for everything that runs locally (the whole current product).
+Future paid tiers only add hosted convenience (relay that sees only
+ciphertext). No ads, no data monetization.

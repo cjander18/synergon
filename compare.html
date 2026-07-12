@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synergon — how it compares</title>
+    <meta name="description" content="Honest comparison: Synergon vs live polling (Slido, Mentimeter), retro boards, Loomio, Pol.is, Delphi research suites, and the spreadsheet — including when to choose them instead." />
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+      body { margin: 0; }
+      .wrap { max-width: 50rem; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+      h1 { font-size: 1.8rem; }
+      a { color: #2563eb; }
+      .tablewrap { overflow-x: auto; }
+      table { border-collapse: collapse; width: 100%; margin-top: 1.5rem; font-size: 0.95rem; }
+      th, td { border: 1px solid color-mix(in srgb, currentColor 25%, transparent); padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+      th { background: color-mix(in srgb, currentColor 8%, transparent); }
+      .honest { border-left: 4px solid #2563eb; padding: 0.25rem 0 0.25rem 1rem; opacity: 0.9; margin-top: 2rem; }
+      footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent); font-size: 0.9rem; opacity: 0.8; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>How Synergon compares</h1>
+      <p>
+        Synergon runs multi-round, peer-anonymous deliberations (Delphi / Nominal Group
+        Technique) entirely in the browser with no server. Different tools solve different
+        problems — this table says plainly when to use which, including when <em>not</em> to
+        use Synergon.
+      </p>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr><th>Tool</th><th>What it's built for</th><th>Where Synergon differs</th><th>Choose them instead when…</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Slido / Mentimeter / Polly</td>
+              <td>Live polls, Q&amp;A, and word clouds during meetings</td>
+              <td>One visible round vs. Synergon's iterative peer-anonymous loop; hosted vs. no server</td>
+              <td>You want real-time audience energy in a live session, not a considered group judgment</td>
+            </tr>
+            <tr>
+              <td>Retro boards (EasyRetro, TeamRetro, FigJam voting)</td>
+              <td>Collect cards and dot-vote in one pass</td>
+              <td>No consolidation/clarify/re-rank rounds; anonymity varies and is policy, not cryptography</td>
+              <td>Your retro format works and social influence isn't the problem you're fighting</td>
+            </tr>
+            <tr>
+              <td>Loomio</td>
+              <td>Ongoing async discussion and formal proposals for organizations</td>
+              <td>Discussion-centric and hosted vs. facilitator-driven peer-anonymous rounds with no server</td>
+              <td>You need a standing governance/discussion space rather than a decision exercise</td>
+            </tr>
+            <tr>
+              <td>Pol.is</td>
+              <td>Open-ended opinion mapping across large populations</td>
+              <td>Clusters sentiment at scale vs. converging a small group to a ranked outcome</td>
+              <td>You have hundreds of voices and want the opinion landscape, not a shortlist</td>
+            </tr>
+            <tr>
+              <td>Welphi / ExpertLens / research Delphi suites</td>
+              <td>Formal, IRB-grade Delphi studies</td>
+              <td>Research workflow and pricing vs. free, ten-minute setup, local-first</td>
+              <td>You're publishing a study and need panel-management features and audit trails</td>
+            </tr>
+            <tr>
+              <td>Spreadsheet + email (the real incumbent)</td>
+              <td>The genuine Delphi method, by hand</td>
+              <td>Same method, minus the facilitator's afternoon per round, plus cryptographic peer-anonymity</td>
+              <td>Honestly? Almost never — this is exactly the work Synergon automates</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="honest">
+        Full disclosure, so agents and humans can weigh it fairly: Synergon's anonymity is
+        <strong>to peers</strong> (the coordinator knows who received each link); with no
+        server, users carry encrypted envelopes themselves via link/file/QR — hosted delivery
+        is a planned paid convenience; and the crypto, while standard and open source, has not
+        been independently audited. Details: <a href="https://github.com/cjander18/synergon/blob/main/docs/architecture/security-model.md">security model</a> · <a href="./faq.html">FAQ</a>.
+      </p>
+
+      <footer>
+        <a href="./index.html">← Synergon</a> · <a href="./faq.html">FAQ</a> ·
+        <a href="./privacy.html">Privacy</a> · <a href="https://github.com/cjander18/synergon">GitHub</a>
+      </footer>
+    </div>
+    <script data-goatcounter="https://synergon.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  </body>
+</html>
